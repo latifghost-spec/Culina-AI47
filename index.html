@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CulinaAI - Professional Chef Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 10px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            margin: 0 5px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .tab.active {
+            background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .content {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: #27ae60;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .supplier-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .supplier-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .supplier-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .info-item strong {
+            color: #667eea;
+        }
+
+        .ai-recommendation {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .ai-recommendation h4 {
+            color: #2d3436;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .alert {
+            background: linear-gradient(135deg, #ff7675 0%, #d63031 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                margin: 5px 0;
+            }
+            
+            .supplier-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ CulinaAI</h1>
+            <p>Professional Chef Platform with AI-Powered Supplier Management</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('auth')">👨‍🍳 Authentication</button>
+            <button class="tab" onclick="showTab('suppliers')">🏢 Suppliers</button>
+            <button class="tab" onclick="showTab('inventory')">📦 Inventory</button>
+            <button class="tab" onclick="showTab('ai-consultant')">🤖 AI Consultant</button>
+        </div>
+
+        <div class="content">
+            <!-- Authentication Tab -->
+            <div id="auth" class="tab-content active">
+                <h2>Chef Authentication</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <!-- Registration Form -->
+                    <div>
+                        <h3>Register New Chef</h3>
+                        <form id="registerForm">
+                            <div class="form-group">
+                                <label for="regEmail">Email *</label>
+                                <input type="email" id="regEmail" required>
+                                <div id="regEmailError" class="error-message"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regUsername">Username * (no spaces)</label>
+                                <input type="text" id="regUsername" required placeholder="e.g., chefjohn">
+                                <div id="regUsernameError" class="error-message"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regFullName">Full Name *</label>
+                                <input type="text" id="regFullName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regPassword">Password * (min 6 characters)</label>
+                                <input type="password" id="regPassword" required minlength="6">
+                                <div id="regPasswordError" class="error-message"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regRestaurant">Restaurant Name *</label>
+                                <input type="text" id="regRestaurant" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regCuisine">Cuisine Specialty *</label>
+                                <select id="regCuisine" required>
+                                    <option value="">Select Cuisine</option>
+                                    <option value="Mediterranean">Mediterranean</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="French">French</option>
+                                    <option value="Asian">Asian</option>
+                                    <option value="Mexican">Mexican</option>
+                                    <option value="American">American</option>
+                                    <option value="Fusion">Fusion</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regExperience">Years of Experience</label>
+                                <input type="number" id="regExperience" min="0" max="50">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="regPhone">Phone Number</label>
+                                <input type="tel" id="regPhone">
+                            </div>
+                            
+                            <button type="submit" class="btn">Register Chef</button>
+                        </form>
+                        <div id="regResult"></div>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <div>
+                        <h3>Chef Login</h3>
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="loginUsername">Username</label>
+                                <input type="text" id="loginUsername" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="loginPassword">Password</label>
+                                <input type="password" id="loginPassword" required>
+                            </div>
+                            
+                            <button type="submit" class="btn">Login</button>
+                        </form>
+                        <div id="loginResult"></div>
+                        
+                        <div id="userProfile" style="margin-top: 20px; display: none;">
+                            <h4>Welcome <span id="profileName"></span>!</h4>
+                            <p>Restaurant: <span id="profileRestaurant"></span></p>
+                            <p>Specialty: <span id="profileSpecialty"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suppliers Tab -->
+            <div id="suppliers" class="tab-content">
+                <h2>Supplier Management</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <!-- Add Supplier Form -->
+                    <div>
+                        <h3>Add New Supplier</h3>
+                        <form id="addSupplierForm">
+                            <div class="form-group">
+                                <label for="supplierName">Supplier Name *</label>
+                                <input type="text" id="supplierName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supplierBrand">Brand/Manufacturer</label>
+                                <input type="text" id="supplierBrand" placeholder="e.g., Josper, Houna">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supplierCategory">Category *</label>
+                                <select id="supplierCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="equipment">Equipment</option>
+                                    <option value="ingredients">Ingredients</option>
+                                    <option value="beverages">Beverages</option>
+                                    <option value="packaging">Packaging</option>
+                                    <option value="cleaning">Cleaning Supplies</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supplierContact">Contact Person</label>
+                                <input type="text" id="supplierContact">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supplierEmail">Email</label>
+                                <input type="email" id="supplierEmail">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supplierPhone">Phone</label>
+                                <input type="tel" id="supplierPhone">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supplierAddress">Address</label>
+                                <textarea id="supplierAddress" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supplierRating">Rating (1-5)</label>
+                                <select id="supplierRating">
+                                    <option value="">Select Rating</option>
+                                    <option value="5">5 - Excellent</option>
+                                    <option value="4">4 - Very Good</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="2">2 - Fair</option>
+                                    <option value="1">1 - Poor</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn">Add Supplier</button>
+                        </form>
+                        <div id="supplierResult"></div>
+                    </div>
+                    
+                    <!-- AI Recommendations -->
+                    <div>
+                        <h3>🤖 AI Supplier Recommendations</h3>
+                        <div class="form-group">
+                            <label for="recommendationProduct">What do you need to order?</label>
+                            <input type="text" id="recommendationProduct" placeholder="e.g., wagyu beef, professional oven, olive oil">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="recommendationQuantity">Quantity</label>
+                            <input type="text" id="recommendationQuantity" placeholder="e.g., 20kg, 1 unit, 5 liters">
+                        </div>
+                        
+                        <button type="button" class="btn" onclick="getAIRecommendations()">Get AI Recommendations</button>
+                        
+                        <div id="aiRecommendations" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Your Suppliers</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-secondary" onclick="exportSuppliers('excel')">📊 Export to Excel</button>
+                        <button class="btn btn-secondary" onclick="exportSuppliers('csv')">📋 Export to CSV</button>
+                    </div>
+                    <div id="suppliersList"></div>
+                </div>
+            </div>
+
+            <!-- Inventory Tab -->
+            <div id="inventory" class="tab-content">
+                <h2>Inventory Management</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <!-- Add Inventory Item -->
+                    <div>
+                        <h3>Add Inventory Item</h3>
+                        <form id="addInventoryForm">
+                            <div class="form-group">
+                                <label for="inventoryItem">Item Name *</label>
+                                <input type="text" id="inventoryItem" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inventoryCategory">Category *</label>
+                                <select id="inventoryCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="meat">Meat & Poultry</option>
+                                    <option value="seafood">Seafood</option>
+                                    <option value="dairy">Dairy</option>
+                                    <option value="produce">Produce</option>
+                                    <option value="pantry">Pantry & Dry Goods</option>
+                                    <option value="beverages">Beverages</option>
+                                    <option value="equipment">Equipment</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inventoryQuantity">Current Quantity *</label>
+                                <input type="number" id="inventoryQuantity" step="0.1" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inventoryUnit">Unit *</label>
+                                <select id="inventoryUnit" required>
+                                    <option value="">Select Unit</option>
+                                    <option value="kg">kg</option>
+                                    <option value="g">g</option>
+                                    <option value="lbs">lbs</option>
+                                    <option value="oz">oz</option>
+                                    <option value="liters">liters</option>
+                                    <option value="ml">ml</option>
+                                    <option value="units">units</option>
+                                    <option value="pieces">pieces</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inventoryMinStock">Minimum Stock Level *</label>
+                                <input type="number" id="inventoryMinStock" step="0.1" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inventoryMaxStock">Maximum Stock Level</label>
+                                <input type="number" id="inventoryMaxStock" step="0.1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inventoryMonthlyUsage">Monthly Usage (kg/units)</label>
+                                <input type="number" id="inventoryMonthlyUsage" step="0.1" placeholder="e.g., 20 for 20kg wagyu beef monthly">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inventorySupplier">Preferred Supplier</label>
+                                <select id="inventorySupplier">
+                                    <option value="">Select Supplier</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="inventoryExpiry">Expiry Date</label>
+                                <input type="date" id="inventoryExpiry">
+                            </div>
+                            
+                            <button type="submit" class="btn">Add to Inventory</button>
+                        </form>
+                        <div id="inventoryResult"></div>
+                    </div>
+                    
+                    <!-- Stock Alerts -->
+                    <div>
+                        <h3>🚨 Stock Alerts</h3>
+                        <button type="button" class="btn" onclick="checkStockAlerts()">Check Stock Alerts</button>
+                        <div id="stockAlerts" style="margin-top: 20px;"></div>
+                        
+                        <div class="ai-recommendation" style="margin-top: 20px;">
+                            <h4>💡 AI Consumption Analysis</h4>
+                            <p>Based on your monthly usage patterns, AI will recommend optimal reorder points and quantities to minimize waste and ensure availability.</p>
+                            <button type="button" class="btn btn-secondary" onclick="getConsumptionAnalysis()">Analyze Consumption</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Current Inventory</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-secondary" onclick="exportInventory('excel')">📊 Export to Excel</button>
+                        <button class="btn btn-secondary" onclick="exportInventory('csv')">📋 Export to CSV</button>
+                    </div>
+                    <div id="inventoryList"></div>
+                </div>
+            </div>
+
+            <!-- AI Consultant Tab -->
+            <div id="ai-consultant" class="tab-content">
+                <h2>🤖 AI Equipment Consultant</h2>
+                
+                <div class="ai-recommendation">
+                    <h3>Get AI-Powered Equipment Recommendations</h3>
+                    <p>Our AI consultant will help you find the best equipment suppliers and compare prices across multiple brands.</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <h3>Equipment Consultation</h3>
+                        <form id="equipmentConsultForm">
+                            <div class="form-group">
+                                <label for="equipmentType">Equipment Type *</label>
+                                <select id="equipmentType" required>
+                                    <option value="">Select Equipment Type</option>
+                                    <option value="oven">Oven</option>
+                                    <option value="grill">Grill</option>
+                                    <option value="refrigeration">Refrigeration</option>
+                                    <option value="prep_equipment">Prep Equipment</option>
+                                    <option value="cookware">Cookware</option>
+                                    <option value="serving_equipment">Serving Equipment</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="equipmentBrand">Preferred Brand (Optional)</label>
+                                <input type="text" id="equipmentBrand" placeholder="e.g., Josper, Houna, Rational">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="equipmentBudget">Budget Range</label>
+                                <select id="equipmentBudget">
+                                    <option value="">Select Budget</option>
+                                    <option value="0-5000">$0 - $5,000</option>
+                                    <option value="5000-15000">$5,000 - $15,000</option>
+                                    <option value="15000-30000">$15,000 - $30,000</option>
+                                    <option value="30000+">$30,000+</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="equipmentRequirements">Specific Requirements</label>
+                                <textarea id="equipmentRequirements" rows="4" placeholder="e.g., need charcoal grill for 50+ covers per service, prefer Made in EU, energy efficient"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn">Get AI Recommendations</button>
+                        </form>
+                        <div id="equipmentResult"></div>
+                    </div>
+                    
+                    <div>
+                        <h3>Price Comparison</h3>
+                        <div class="form-group">
+                            <label for="compareProduct">Product to Compare</label>
+                            <input type="text" id="compareProduct" placeholder="e.g., Josper charcoal oven">
+                        </div>
+                        
+                        <button type="button" class="btn" onclick="comparePrices()">Compare Prices</button>
+                        
+                        <div id="priceComparison" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3>Equipment Comparison Results</h3>
+                    <div id="equipmentComparisonResults"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = null;
+        let currentChef = null;
+
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Load data for specific tabs
+            if (tabName === 'suppliers' && authToken) {
+                loadSuppliers();
+            } else if (tabName === 'inventory' && authToken) {
+                loadInventory();
+                loadSuppliersForDropdown();
+            }
+        }
+
+        // Validation functions
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validateUsername(username) {
+            const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+            return usernameRegex.test(username);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        // Registration form handling
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('regEmail').value;
+            const username = document.getElementById('regUsername').value;
+            const fullName = document.getElementById('regFullName').value;
+            const password = document.getElementById('regPassword').value;
+            const restaurant = document.getElementById('regRestaurant').value;
+            const cuisine = document.getElementById('regCuisine').value;
+            const experience = document.getElementById('regExperience').value;
+            const phone = document.getElementById('regPhone').value;
+            
+            // Clear previous errors
+            document.getElementById('regEmailError').textContent = '';
+            document.getElementById('regUsernameError').textContent = '';
+            document.getElementById('regPasswordError').textContent = '';
+            
+            // Validate inputs
+            let hasError = false;
+            
+            if (!validateEmail(email)) {
+                document.getElementById('regEmailError').textContent = 'Please enter a valid email address';
+                hasError = true;
+            }
+            
+            if (!validateUsername(username)) {
+                document.getElementById('regUsernameError').textContent = 'Username can only contain letters, numbers, hyphens, and underscores (no spaces)';
+                hasError = true;
+            }
+            
+            if (!validatePassword(password)) {
+                document.getElementById('regPasswordError').textContent = 'Password must be at least 6 characters long';
+                hasError = true;
+            }
+            
+            if (hasError) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        username: username,
+                        full_name: fullName,
+                        password: password,
+                        restaurant_name: restaurant,
+                        cuisine_specialty: cuisine,
+                        years_experience: experience ? parseInt(experience) : 0,
+                        phone: phone
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('regResult').innerHTML = 
+                        `<div class="success-message">✅ Registration successful! Welcome ${data.full_name}!</div>`;
+                    document.getElementById('registerForm').reset();
+                } else {
+                    document.getElementById('regResult').innerHTML = 
+                        `<div class="error-message">❌ Registration failed: ${data.detail || 'Unknown error'}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('regResult').innerHTML = 
+                    `<div class="error-message">❌ Network error: ${error.message}</div>`;
+            }
+        });
+
+        // Login form handling
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.access_token;
+                    localStorage.setItem('access_token', authToken);
+                    
+                    document.getElementById('loginResult').innerHTML = 
+                        `<div class="success-message">✅ Login successful!</div>`;
+                    
+                    // Get user profile
+                    await loadUserProfile();
+                    
+                    document.getElementById('loginForm').reset();
+                } else {
+                    document.getElementById('loginResult').innerHTML = 
+                        `<div class="error-message">❌ Login failed: ${data.detail || 'Unknown error'}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('loginResult').innerHTML = 
+                    `<div class="error-message">❌ Network error: ${error.message}</div>`;
+            }
+        });
+
+        // Load user profile
+        async function loadUserProfile() {
+            if (!authToken) return;
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentChef = data;
+                    document.getElementById('userProfile').style.display = 'block';
+                    document.getElementById('profileName').textContent = data.full_name;
+                    document.getElementById('profileRestaurant').textContent = data.restaurant_name;
+                    document.getElementById('profileSpecialty').textContent = data.cuisine_specialty;
+                }
+            } catch (error) {
+                console.error('Failed to load user profile:', error);
+            }
+        }
+
+        // Load suppliers
+        async function loadSuppliers() {
+            if (!authToken) return;
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displaySuppliers(data);
+                } else {
+                    document.getElementById('suppliersList').innerHTML = 
+                        `<div class="error-message">Failed to load suppliers: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('suppliersList').innerHTML = 
+                    `<div class="error-message">Network error: ${error.message}</div>`;
+            }
+        }
+
+        // Display suppliers
+        function displaySuppliers(suppliers) {
+            const container = document.getElementById('suppliersList');
+            
+            if (suppliers.length === 0) {
+                container.innerHTML = '<p>No suppliers found. Add your first supplier above!</p>';
+                return;
+            }
+            
+            container.innerHTML = suppliers.map(supplier => `
+                <div class="supplier-card">
+                    <h3>${supplier.name}</h3>
+                    ${supplier.brand ? `<p><strong>Brand:</strong> ${supplier.brand}</p>` : ''}
+                    <div class="supplier-info">
+                        <div class="info-item">
+                            <strong>Category:</strong> ${supplier.category}
+                        </div>
+                        <div class="info-item">
+                            <strong>Contact:</strong> ${supplier.contact_person || 'N/A'}
+                        </div>
+                        <div class="info-item">
+                            <strong>Email:</strong> ${supplier.email || 'N/A'}
+                        </div>
+                        <div class="info-item">
+                            <strong>Phone:</strong> ${supplier.phone || 'N/A'}
+                        </div>
+                        ${supplier.rating ? `
+                        <div class="info-item">
+                            <strong>Rating:</strong> ${'⭐'.repeat(supplier.rating)} ${supplier.rating}/5
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-secondary" onclick="getSupplierRecommendations(${supplier.id})">
+                            Get AI Recommendations for this Supplier
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add supplier form handling
+        document.getElementById('addSupplierForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!authToken) {
+                document.getElementById('supplierResult').innerHTML = 
+                    `<div class="error-message">❌ Please login first</div>`;
+                return;
+            }
+            
+            const formData = {
+                name: document.getElementById('supplierName').value,
+                brand: document.getElementById('supplierBrand').value,
+                category: document.getElementById('supplierCategory').value,
+                contact_person: document.getElementById('supplierContact').value,
+                email: document.getElementById('supplierEmail').value,
+                phone: document.getElementById('supplierPhone').value,
+                address: document.getElementById('supplierAddress').value,
+                rating: document.getElementById('supplierRating').value ? parseInt(document.getElementById('supplierRating').value) : null
+            };
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('supplierResult').innerHTML = 
+                        `<div class="success-message">✅ Supplier added successfully!</div>`;
+                    document.getElementById('addSupplierForm').reset();
+                    loadSuppliers();
+                } else {
+                    document.getElementById('supplierResult').innerHTML = 
+                        `<div class="error-message">❌ Failed to add supplier: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('supplierResult').innerHTML = 
+                    `<div class="error-message">❌ Network error: ${error.message}</div>`;
+            }
+        });
+
+        // Get AI recommendations
+        async function getAIRecommendations() {
+            const product = document.getElementById('recommendationProduct').value;
+            const quantity = document.getElementById('recommendationQuantity').value;
+            
+            if (!product) {
+                document.getElementById('aiRecommendations').innerHTML = 
+                    `<div class="error-message">Please enter what you need to order</div>`;
+                return;
+            }
+            
+            if (!authToken) {
+                document.getElementById('aiRecommendations').innerHTML = 
+                    `<div class="error-message">❌ Please login first</div>`;
+                return;
+            }
+            
+            const container = document.getElementById('aiRecommendations');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Getting AI recommendations...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/ai-recommendations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        product: product,
+                        quantity: quantity
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayAIRecommendations(data);
+                } else {
+                    container.innerHTML = 
+                        `<div class="error-message">❌ Failed to get recommendations: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = 
+                    `<div class="error-message">❌ Network error: ${error.message}</div>`;
+            }
+        }
+
+        // Display AI recommendations
+        function displayAIRecommendations(recommendations) {
+            const container = document.getElementById('aiRecommendations');
+            
+            container.innerHTML = `
+                <div class="ai-recommendation">
+                    <h4>🤖 AI Recommendations for: ${recommendations.product}</h4>
+                    <p><strong>Best Supplier:</strong> ${recommendations.recommended_supplier}</p>
+                    <p><strong>Estimated Price:</strong> ${recommendations.estimated_price} ${recommendations.currency}</p>
+                    <p><strong>Confidence:</strong> ${(recommendations.confidence * 100).toFixed(1)}%</p>
+                    <p><strong>Reasoning:</strong> ${recommendations.reasoning}</p>
+                    
+                    ${recommendations.alternatives.length > 0 ? `
+                        <h5>Alternative Options:</h5>
+                        <ul>
+                            ${recommendations.alternatives.map(alt => `
+                                <li><strong>${alt.supplier}</strong>: ${alt.price} ${alt.currency} (${alt.availability})</li>
+                            `).join('')}
+                        </ul>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Export functionality
+        async function exportSuppliers(format) {
+            if (!authToken) {
+                alert('Please login first');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:8000/api/suppliers/export/${format}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `suppliers.${format}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    alert('Export failed');
+                }
+            } catch (error) {
+                alert('Export error: ' + error.message);
+            }
+        }
+
+        // Load inventory
+        async function loadInventory() {
+            if (!authToken) return;
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/inventory/', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayInventory(data);
+                } else {
+                    document.getElementById('inventoryList').innerHTML = 
+                        `<div class="error-message">Failed to load inventory: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('inventoryList').innerHTML = 
+                    `<div class="error-message">Network error: ${error.message}</div>`;
+            }
+        }
+
+        // Display inventory
+        function displayInventory(inventory) {
+            const container = document.getElementById('inventoryList');
+            
+            if (inventory.length === 0) {
+                container.innerHTML = '<p>No inventory items found. Add your first item above!</p>';
+                return;
+            }
+            
+            container.innerHTML = inventory.map(item => `
+                <div class="supplier-card">
+                    <h3>${item.item_name}</h3>
+                    <div class="supplier-info">
+                        <div class="info-item">
+                            <strong>Category:</strong> ${item.category}
+                        </div>
+                        <div class="info-item">
+                            <strong>Current Stock:</strong> ${item.current_quantity} ${item.unit}
+                        </div>
+                        <div class="info-item">
+                            <strong>Min Stock:</strong> ${item.min_stock_level} ${item.unit}
+                        </div>
+                        ${item.monthly_usage ? `
+                        <div class="info-item">
+                            <strong>Monthly Usage:</strong> ${item.monthly_usage} ${item.unit}
+                        </div>
+                        ` : ''}
+                        ${item.expiry_date ? `
+                        <div class="info-item">
+                            <strong>Expires:</strong> ${new Date(item.expiry_date).toLocaleDateString()}
+                        </div>
+                        ` : ''}
+                        <div class="info-item">
+                            <strong>Status:</strong> 
+                            ${item.current_quantity <= item.min_stock_level ? 
+                                '<span style="color: #e74c3c;">🔴 Low Stock</span>' : 
+                                '<span style="color: #27ae60;">🟢 OK</span>'}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add inventory form handling
+        document.getElementById('addInventoryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!authToken) {
+                document.getElementById('inventoryResult').innerHTML = 
+                    `<div class="error-message">❌ Please login first</div>`;
+                return;
+            }
+            
+            const formData = {
+                item_name: document.getElementById('inventoryItem').value,
+                category: document.getElementById('inventoryCategory').value,
+                current_quantity: parseFloat(document.getElementById('inventoryQuantity').value),
+                unit: document.getElementById('inventoryUnit').value,
+                min_stock_level: parseFloat(document.getElementById('inventoryMinStock').value),
+                max_stock_level: document.getElementById('inventoryMaxStock').value ? parseFloat(document.getElementById('inventoryMaxStock').value) : null,
+                monthly_usage: document.getElementById('inventoryMonthlyUsage').value ? parseFloat(document.getElementById('inventoryMonthlyUsage').value) : null,
+                supplier_id: document.getElementById('inventorySupplier').value ? parseInt(document.getElementById('inventorySupplier').value) : null,
+                expiry_date: document.getElementById('inventoryExpiry').value || null
+            };
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/inventory/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('inventoryResult').innerHTML = 
+                        `<div class="success-message">✅ Inventory item added successfully!</div>`;
+                    document.getElementById('addInventoryForm').reset();
+                    loadInventory();
+                } else {
+                    document.getElementById('inventoryResult').innerHTML = 
+                        `<div class="error-message">❌ Failed to add inventory: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('inventoryResult').innerHTML = 
+                    `<div class="error-message">❌ Network error: ${error.message}</div>`;
+            }
+        });
+
+        // Load suppliers for dropdown
+        async function loadSuppliersForDropdown() {
+            if (!authToken) return;
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const select = document.getElementById('inventorySupplier');
+                    select.innerHTML = '<option value="">Select Supplier</option>' + 
+                        data.map(supplier => 
+                            `<option value="${supplier.id}">${supplier.name}</option>`
+                        ).join('');
+                }
+            } catch (error) {
+                console.error('Failed to load suppliers for dropdown:', error);
+            }
+        }
+
+        // Check stock alerts
+        async function checkStockAlerts() {
+            if (!authToken) {
+                document.getElementById('stockAlerts').innerHTML = 
+                    `<div class="error-message">❌ Please login first</div>`;
+                return;
+            }
+            
+            const container = document.getElementById('stockAlerts');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Checking stock alerts...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/inventory/alerts', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (data.length === 0) {
+                        container.innerHTML = '<div class="success-message">✅ No stock alerts - all items are well stocked!</div>';
+                    } else {
+                        container.innerHTML = data.map(alert => `
+                            <div class="alert">
+                                <div class="alert-icon">⚠️</div>
+                                <div>
+                                    <strong>${alert.item_name}</strong> is running low!<br>
+                                    Current: ${alert.current_quantity} ${alert.unit} | 
+                                    Minimum: ${alert.min_stock_level} ${alert.unit}<br>
+                                    <strong>AI Suggestion:</strong> Order ${alert.suggested_quantity} ${alert.unit} 
+                                    from ${alert.recommended_supplier}
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    container.innerHTML = 
+                        `<div class="error-message">❌ Failed to get alerts: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = 
+                    `<div class="error-message">❌ Network error: ${error.message}</div>`;
+            }
+        }
+
+        // Get consumption analysis
+        async function getConsumptionAnalysis() {
+            if (!authToken) {
+                alert('Please login first');
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/inventory/consumption-analysis', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Consumption analysis completed! Check the inventory tab for optimized reorder suggestions.');
+                } else {
+                    alert('Analysis failed: ' + data.detail);
+                }
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            }
+        }
+
+        // Export inventory
+        async function exportInventory(format) {
+            if (!authToken) {
+                alert('Please login first');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:8000/api/suppliers/inventory/export/${format}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `inventory.${format}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    alert('Export failed');
+                }
+            } catch (error) {
+                alert('Export error: ' + error.message);
+            }
+        }
+
+        // Equipment consultation form
+        document.getElementById('equipmentConsultForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!authToken) {
+                document.getElementById('equipmentResult').innerHTML = 
+                    `<div class="error-message">❌ Please login first</div>`;
+                return;
+            }
+            
+            const equipmentType = document.getElementById('equipmentType').value;
+            const brand = document.getElementById('equipmentBrand').value;
+            const budget = document.getElementById('equipmentBudget').value;
+            const requirements = document.getElementById('equipmentRequirements').value;
+            
+            const container = document.getElementById('equipmentResult');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Getting equipment recommendations...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/ai-equipment-consultation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        equipment_type: equipmentType,
+                        brand: brand,
+                        budget_range: budget,
+                        requirements: requirements
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayEquipmentRecommendations(data);
+                } else {
+                    container.innerHTML = 
+                        `<div class="error-message">❌ Failed to get recommendations: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = 
+                    `<div class="error-message">❌ Network error: ${error.message}</div>`;
+            }
+        });
+
+        // Display equipment recommendations
+        function displayEquipmentRecommendations(recommendations) {
+            const container = document.getElementById('equipmentResult');
+            
+            container.innerHTML = `
+                <div class="ai-recommendation">
+                    <h4>🤖 AI Equipment Recommendations</h4>
+                    <p><strong>Recommended Equipment:</strong> ${recommendations.recommended_equipment}</p>
+                    <p><strong>Best Supplier:</strong> ${recommendations.recommended_supplier}</p>
+                    <p><strong>Estimated Price:</strong> ${recommendations.estimated_price} ${recommendations.currency}</p>
+                    <p><strong>Key Features:</strong> ${recommendations.key_features}</p>
+                    <p><strong>Why This Choice:</strong> ${recommendations.justification}</p>
+                    
+                    ${recommendations.alternatives.length > 0 ? `
+                        <h5>Alternative Options:</h5>
+                        <div class="comparison-table">
+                            <table style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Equipment</th>
+                                        <th>Supplier</th>
+                                        <th>Price</th>
+                                        <th>Features</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${recommendations.alternatives.map(alt => `
+                                        <tr>
+                                            <td>${alt.equipment_name}</td>
+                                            <td>${alt.supplier}</td>
+                                            <td>${alt.price} ${alt.currency}</td>
+                                            <td>${alt.key_features}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Compare prices
+        async function comparePrices() {
+            const product = document.getElementById('compareProduct').value;
+            
+            if (!product) {
+                document.getElementById('priceComparison').innerHTML = 
+                    `<div class="error-message">Please enter a product to compare</div>`;
+                return;
+            }
+            
+            if (!authToken) {
+                document.getElementById('priceComparison').innerHTML = 
+                    `<div class="error-message">❌ Please login first</div>`;
+                return;
+            }
+            
+            const container = document.getElementById('priceComparison');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div>Comparing prices...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/suppliers/compare-prices', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        product: product
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayPriceComparison(data);
+                } else {
+                    container.innerHTML = 
+                        `<div class="error-message">❌ Failed to compare prices: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                container.innerHTML = 
+                    `<div class="error-message">❌ Network error: ${error.message}</div>`;
+            }
+        }
+
+        // Display price comparison
+        function displayPriceComparison(comparison) {
+            const container = document.getElementById('priceComparison');
+            
+            container.innerHTML = `
+                <div class="ai-recommendation">
+                    <h4>💰 Price Comparison Results</h4>
+                    <p><strong>Product:</strong> ${comparison.product}</p>
+                    
+                    <div class="comparison-table">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Supplier</th>
+                                    <th>Price</th>
+                                    <th>Availability</th>
+                                    <th>Delivery Time</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${comparison.suppliers.map(supplier => `
+                                    <tr>
+                                        <td><strong>${supplier.name}</strong></td>
+                                        <td>${supplier.price} ${supplier.currency}</td>
+                                        <td>${supplier.availability}</td>
+                                        <td>${supplier.delivery_time}</td>
+                                        <td>${supplier.rating ? '⭐'.repeat(supplier.rating) + ' ' + supplier.rating + '/5' : 'N/A'}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="margin-top: 15px;">
+                        <strong>💡 AI Recommendation:</strong> ${comparison.recommendation}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Check for saved auth token on page load
+        window.addEventListener('load', function() {
+            const savedToken = localStorage.getItem('access_token');
+            if (savedToken) {
+                authToken = savedToken;
+                loadUserProfile();
+            }
+        });
+    </script>
+</body>
+</html>

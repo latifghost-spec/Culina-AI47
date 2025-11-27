@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Authentication</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>CulinaAI Authentication Test</h1>
+    <div id="test-results"></div>
+
+    <script>
+        const resultsDiv = document.getElementById('test-results');
+        
+        function addResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = message;
+            resultsDiv.appendChild(div);
+        }
+
+        async function testAuthentication() {
+            addResult('Starting authentication tests...', 'info');
+            
+            // Test 1: Register a new chef
+            try {
+                addResult('Testing chef registration...', 'info');
+                const registerResponse = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'testchef@culinaai.com',
+                        username: 'testchef',
+                        full_name: 'Test Chef',
+                        password: 'password123',
+                        restaurant_name: 'Test Restaurant',
+                        cuisine_specialty: 'Mediterranean'
+                    })
+                });
+                
+                const registerData = await registerResponse.json();
+                if (registerResponse.ok) {
+                    addResult('✅ Chef registration successful!', 'success');
+                    addResult(`User ID: ${registerData.id}, Username: ${registerData.username}`, 'success');
+                } else {
+                    addResult(`❌ Registration failed: ${registerData.detail || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Registration error: ${error.message}`, 'error');
+            }
+            
+            // Test 2: Login
+            try {
+                addResult('Testing chef login...', 'info');
+                const loginResponse = await fetch('http://localhost:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: 'testchef',
+                        password: 'password123'
+                    })
+                });
+                
+                const loginData = await loginResponse.json();
+                if (loginResponse.ok) {
+                    addResult('✅ Chef login successful!', 'success');
+                    addResult(`Access token received: ${loginData.access_token.substring(0, 20)}...`, 'success');
+                    
+                    // Store token for further tests
+                    localStorage.setItem('access_token', loginData.access_token);
+                    
+                    // Test 3: Get user profile
+                    try {
+                        addResult('Testing user profile retrieval...', 'info');
+                        const profileResponse = await fetch('http://localhost:8000/api/auth/me', {
+                            headers: {
+                                'Authorization': `Bearer ${loginData.access_token}`
+                            }
+                        });
+                        
+                        const profileData = await profileResponse.json();
+                        if (profileResponse.ok) {
+                            addResult('✅ User profile retrieved successfully!', 'success');
+                            addResult(`Welcome ${profileData.full_name} from ${profileData.restaurant_name}!`, 'success');
+                        } else {
+                            addResult(`❌ Profile retrieval failed: ${profileData.detail}`, 'error');
+                        }
+                    } catch (error) {
+                        addResult(`❌ Profile error: ${error.message}`, 'error');
+                    }
+                    
+                } else {
+                    addResult(`❌ Login failed: ${loginData.detail || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Login error: ${error.message}`, 'error');
+            }
+            
+            // Test 4: Menu generation with authentication
+            try {
+                addResult('Testing authenticated menu generation...', 'info');
+                const token = localStorage.getItem('access_token');
+                const menuResponse = await fetch('http://localhost:8000/api/menus/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        cuisine: 'Mediterranean',
+                        num_guests: 4,
+                        dietary_preferences: 'vegetarian',
+                        season: 'summer',
+                        region: 'tunisia'
+                    })
+                });
+                
+                const menuData = await menuResponse.json();
+                if (menuResponse.ok) {
+                    addResult('✅ Menu generation with authentication successful!', 'success');
+                    if (menuData.real_time_pricing) {
+                        addResult(`💰 Real-time pricing: ${menuData.real_time_pricing.total_cost} ${menuData.real_time_pricing.currency}`, 'success');
+                        addResult(`📍 Sourcing method: ${menuData.real_time_pricing.sourcing_method}`, 'success');
+                    }
+                } else {
+                    addResult(`❌ Menu generation failed: ${menuData.detail}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Menu generation error: ${error.message}`, 'error');
+            }
+            
+            addResult('Authentication tests completed!', 'info');
+        }
+        
+        // Run tests when page loads
+        testAuthentication();
+    </script>
+</body>
+</html>

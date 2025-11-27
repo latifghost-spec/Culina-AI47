@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Registration - CulinaAI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .test-container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+        }
+        .success { background: rgba(39, 174, 96, 0.3); }
+        .error { background: rgba(231, 76, 60, 0.3); }
+        .info { background: rgba(52, 152, 219, 0.3); }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🍽️ CulinaAI Registration Test</h1>
+        <p>Testing the corrected registration functionality with proper validation</p>
+        
+        <div id="test-results">
+            <div class="test-result info">Click the buttons below to run registration tests</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="testValidRegistration()">✅ Test Valid Registration</button>
+            <button onclick="testInvalidUsername()">❌ Test Invalid Username</button>
+            <button onclick="testInvalidEmail()">❌ Test Invalid Email</button>
+            <button onclick="testShortPassword()">❌ Test Short Password</button>
+        </div>
+    </div>
+
+    <script>
+        const resultsDiv = document.getElementById('test-results');
+        
+        function addResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = message;
+            resultsDiv.appendChild(div);
+        }
+
+        function clearResults() {
+            resultsDiv.innerHTML = '';
+        }
+
+        async function testValidRegistration() {
+            clearResults();
+            addResult('Testing valid registration...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'testchef@culinaai.com',
+                        username: 'testchef123',
+                        full_name: 'Test Chef',
+                        password: 'password123',
+                        restaurant_name: 'Test Restaurant',
+                        cuisine_specialty: 'Mediterranean',
+                        years_experience: 8,
+                        phone: '53554018'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult('✅ Valid registration successful!', 'success');
+                    addResult(`User ID: ${data.id}, Username: ${data.username}`, 'success');
+                } else {
+                    addResult(`❌ Registration failed: ${data.detail || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testInvalidUsername() {
+            clearResults();
+            addResult('Testing registration with invalid username (contains spaces)...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'testchef@culinaai.com',
+                        username: 'chef latif',  // Invalid: contains space
+                        full_name: 'Chef Latif',
+                        password: 'password123',
+                        restaurant_name: 'Test Restaurant',
+                        cuisine_specialty: 'Mediterranean',
+                        years_experience: 8,
+                        phone: '53554018'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult('❌ Registration should have failed but succeeded!', 'error');
+                } else {
+                    addResult(`✅ Registration correctly failed: ${data.detail || 'Unknown error'}`, 'success');
+                }
+            } catch (error) {
+                addResult(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testInvalidEmail() {
+            clearResults();
+            addResult('Testing registration with invalid email...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'invalid-email',  // Invalid email format
+                        username: 'testchef456',
+                        full_name: 'Test Chef',
+                        password: 'password123',
+                        restaurant_name: 'Test Restaurant',
+                        cuisine_specialty: 'Mediterranean',
+                        years_experience: 8,
+                        phone: '53554018'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult('❌ Registration should have failed but succeeded!', 'error');
+                } else {
+                    addResult(`✅ Registration correctly failed: ${data.detail || 'Unknown error'}`, 'success');
+                }
+            } catch (error) {
+                addResult(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testShortPassword() {
+            clearResults();
+            addResult('Testing registration with short password...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'testchef@culinaai.com',
+                        username: 'testchef789',
+                        full_name: 'Test Chef',
+                        password: '123',  // Invalid: too short
+                        restaurant_name: 'Test Restaurant',
+                        cuisine_specialty: 'Mediterranean',
+                        years_experience: 8,
+                        phone: '53554018'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult('❌ Registration should have failed but succeeded!', 'error');
+                } else {
+                    addResult(`✅ Registration correctly failed: ${data.detail || 'Unknown error'}`, 'success');
+                }
+            } catch (error) {
+                addResult(`❌ Network error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

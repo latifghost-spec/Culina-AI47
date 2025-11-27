@@ -1,0 +1,70 @@
+<svg width="200" height="80" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definitions for gradients -->
+  <defs>
+    <!-- Electric blue gradient for logo -->
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00A8FF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#14B0FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#19B3FF;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Chef's hat icon with circuit traces -->
+  <g transform="translate(40, 15)">
+    <!-- Chef hat outline -->
+    <path d="M15 5 Q15 0, 25 0 Q35 0, 35 5 L35 15 Q35 20, 30 20 L20 20 Q15 20, 15 15 Z" 
+          fill="none" 
+          stroke="url(#logoGradient)" 
+          stroke-width="2" 
+          filter="url(#glow)"/>
+    
+    <!-- Circuit traces inside hat -->
+    <g stroke="url(#logoGradient)" stroke-width="1.5" fill="none" filter="url(#glow)">
+      <!-- Left circuit line -->
+      <path d="M18 8 Q15 12, 18 16"/>
+      <circle cx="18" cy="16" r="1.5" fill="url(#logoGradient)"/>
+      
+      <!-- Center circuit line (tallest) -->
+      <path d="M25 6 Q25 10, 25 15"/>
+      <circle cx="25" cy="15" r="1.5" fill="url(#logoGradient)"/>
+      
+      <!-- Right circuit line -->
+      <path d="M32 8 Q35 12, 32 16"/>
+      <circle cx="32" cy="16" r="1.5" fill="url(#logoGradient)"/>
+    </g>
+  </g>
+  
+  <!-- CulinaAI text -->
+  <text x="85" y="25" 
+        font-family="'Inter', 'Roboto', 'Montserrat', sans-serif" 
+        font-size="18" 
+        font-weight="700" 
+        fill="url(#logoGradient)" 
+        filter="url(#glow)"
+        letter-spacing="1">
+    CulinaAI
+  </text>
+  
+  <!-- Subtle tech pattern background -->
+  <g opacity="0.1" transform="translate(0, 40)">
+    <circle cx="10" cy="10" r="1" fill="#00A8FF"/>
+    <circle cx="30" cy="10" r="1" fill="#14B0FF"/>
+    <circle cx="50" cy="10" r="1" fill="#19B3FF"/>
+    <circle cx="70" cy="10" r="1" fill="#00A8FF"/>
+    <circle cx="90" cy="10" r="1" fill="#14B0FF"/>
+    <circle cx="110" cy="10" r="1" fill="#19B3FF"/>
+    <circle cx="130" cy="10" r="1" fill="#00A8FF"/>
+    <circle cx="150" cy="10" r="1" fill="#14B0FF"/>
+    <circle cx="170" cy="10" r="1" fill="#19B3FF"/>
+    <circle cx="190" cy="10" r="1" fill="#00A8FF"/>
+  </g>
+</svg>
