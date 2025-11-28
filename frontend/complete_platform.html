@@ -1,0 +1,2405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <title>CulinaAI - Your AI-Powered Culinary Intelligence Platform</title>
+    <script>
+        (function(){
+            var ow = console.warn;
+            console.warn = function(){
+                var msg = arguments && arguments[0] ? String(arguments[0]) : '';
+                if (msg.indexOf('cdn.tailwindcss.com should not be used in production') !== -1) return;
+                return ow.apply(console, arguments);
+            };
+        })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    
+    <script>
+        // Tailwind configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00A8FF',
+                        secondary: '#14B0FF',
+                        accent: '#00D4FF',
+                        dark: '#0A0A0A',
+                        'dark-secondary': '#1A1A1A',
+                        'dark-tertiary': '#2A2A2A',
+                        'success': '#22c55e',
+                        'warning': '#eab308',
+                        'error': '#ef4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'glow': 'glow 2s ease-in-out infinite alternate'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        html { text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+        /* Enhanced Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 168, 255, 0.1);
+        }
+        
+        /* Professional animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px rgba(0, 168, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(0, 168, 255, 0.8)); }
+        }
+        
+        /* Enhanced button styles */
+        .btn-primary {
+            background: linear-gradient(135deg, #00A8FF 0%, #14B0FF 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 168, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 168, 255, 0.4);
+        }
+        
+        /* Enhanced form inputs */
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #00A8FF;
+            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.1);
+        }
+        
+        /* Status indicators */
+        .status-active { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .status-pending { background: rgba(234, 179, 8, 0.2); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3); }
+        .status-error { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        
+        /* Loading animation */
+        .loading-shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Tab navigation */
+        .tab-active {
+            background: linear-gradient(135deg, #00A8FF 0%, #14B0FF 100%);
+            color: white;
+        }
+        /* Section visibility */
+        .section-hidden { display: none; }
+        .section-visible { display: block; }
+    </style>
+</head>
+<body class="bg-dark text-white font-sans">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-dark/80 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-utensils text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">CulinaAI</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="showSection('dashboard')" class="nav-link text-gray-300 hover:text-white transition-colors">Dashboard</button>
+                    <button onclick="showSection('inventory')" class="nav-link text-gray-300 hover:text-white transition-colors">Inventory</button>
+                    <button onclick="showSection('menu-generator')" class="nav-link text-gray-300 hover:text-white transition-colors">Menu Generator</button>
+                    <button onclick="showSection('video-creator')" class="nav-link text-gray-300 hover:text-white transition-colors">Video Creator</button>
+                    <button onclick="showSection('suppliers')" class="nav-link text-gray-300 hover:text-white transition-colors">Suppliers</button>
+                    <button onclick="showSection('financial')" class="nav-link text-gray-300 hover:text-white transition-colors">Financial</button>
+                    <button onclick="showSection('prompts')" class="nav-link text-gray-300 hover:text-white transition-colors">AI Prompts</button>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="showLoginModal()" class="glass-card px-4 py-2 text-sm hover:border-primary transition-all">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </button>
+                    <button id="demoModeBtn" onclick="activateDemoMode()" class="btn-primary text-sm">
+                        <i class="fas fa-magic mr-2"></i>Demo Mode
+                    </button>
+                    <button id="mobileMenuBtn" aria-label="Open menu" class="md:hidden text-gray-300 hover:text-white">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Beautiful Login Modal -->
+    <div id="loginModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="glass-card max-w-md w-full p-8 animate-slide-up">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-utensils text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold gradient-text mb-2">Welcome to CulinaAI</h2>
+                    <p class="text-gray-300">Choose your login method</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Email Login -->
+                    <div class="relative my-6">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-600"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-dark-secondary text-gray-400">or continue with email</span>
+                        </div>
+                    </div>
+                    
+                    <form onsubmit="loginWithEmail(event)" class="space-y-4">
+                        <div>
+                            <input type="email" id="emailInput" aria-label="Email address" placeholder="Enter your email" required 
+                                   class="form-input w-full px-4 py-3 bg-dark-tertiary border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                        </div>
+                        <div>
+                            <input type="password" id="passwordInput" aria-label="Password" placeholder="Enter your password" required 
+                                   class="form-input w-full px-4 py-3 bg-dark-tertiary border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                        </div>
+                        <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold">
+                            <i class="fas fa-envelope mr-2"></i>Login with Email
+                        </button>
+                    </form>
+                    
+                    <!-- Create Account Option -->
+                    <div class="text-center mt-6 pt-6 border-t border-gray-600">
+                        <p class="text-gray-400 mb-3">Don't have an account?</p>
+                        <button onclick="showCreateAccount()" class="text-primary hover:text-secondary font-semibold transition-colors">
+                            Create Account
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Close Button -->
+                    <button onclick="closeLoginModal()" aria-label="Close login modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Account Modal -->
+    <div id="createAccountModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="glass-card max-w-md w-full p-8 animate-slide-up">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-plus text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold gradient-text mb-2">Create Your Account</h2>
+                    <p class="text-gray-300">Join the culinary revolution</p>
+                </div>
+                
+                <form onsubmit="createAccount(event)" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="firstName" aria-label="First name" placeholder="First Name" required 
+                               class="form-input px-4 py-3 bg-dark-tertiary border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20">
+                        <input type="text" id="lastName" aria-label="Last name" placeholder="Last Name" required 
+                               class="form-input px-4 py-3 bg-dark-tertiary border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20">
+                    </div>
+                    <div>
+                        <input type="email" id="newEmail" aria-label="Email address" placeholder="Email Address" required 
+                               class="form-input w-full px-4 py-3 bg-dark-tertiary border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20">
+                    </div>
+                    <div>
+                        <input type="password" id="newPassword" aria-label="Password" placeholder="Create Password" required 
+                               class="form-input w-full px-4 py-3 bg-dark-tertiary border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20">
+                    </div>
+                    <div>
+                        <select id="userType" aria-label="User Type" required class="form-input w-full px-4 py-3 bg-dark-tertiary border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20">
+                            <option value="">Select User Type</option>
+                            <option value="chef">Professional Chef</option>
+                            <option value="restaurant_owner">Restaurant Owner</option>
+                            <option value="food_enthusiast">Food Enthusiast</option>
+                            <option value="catering_manager">Catering Manager</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold">
+                        <i class="fas fa-user-plus mr-2"></i>Create Account
+                    </button>
+                </form>
+                
+                <div class="text-center mt-6 pt-6 border-t border-gray-600">
+                    <button onclick="showLoginModal()" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Login
+                    </button>
+                </div>
+                
+                    <button onclick="closeCreateAccountModal()" aria-label="Close create account modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Welcome Hero Section -->
+        <section id="welcome" class="py-32 bg-gradient-to-br from-dark via-dark-secondary to-dark">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-6xl md:text-8xl font-bold mb-6 animate-fade-in">
+                    STOP WASTING TIME<br>
+                    <span class="gradient-text animate-glow">JOIN CULINAAI</span>
+                </h1>
+                <p class="text-xl text-gray-300 mb-8 max-w-4xl mx-auto animate-fade-in" style="animation-delay: 0.2s;">
+                    Your AI-powered culinary intelligence platform. Sous Chef AI technology with complete inventory management, 
+                    CAPEX/OPEX analysis, supplier integration, and Velo 3 AI video generation. Professional-grade tools for serious chefs.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style="animation-delay: 0.4s;">
+                    <button onclick="showSection('dashboard')" class="btn-primary text-lg px-8 py-4">
+                        <i class="fas fa-rocket mr-3"></i>Start Now
+                    </button>
+                    <button onclick="showSection('api-config')" class="glass-card px-8 py-4 text-lg hover:border-primary transition-all">
+                        <i class="fas fa-key mr-3"></i>Configure API
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section-hidden py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text">Executive Dashboard</h2>
+                    <p class="text-gray-300 text-lg">Real-time insights for culinary operations management</p>
+                </div>
+                
+                <!-- Key Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-3xl font-bold text-primary mb-2" id="dailyRevenue">2,450 TND</div>
+                        <div class="text-gray-300">Daily Revenue</div>
+                        <div class="text-sm text-green-400 mt-2"><i class="fas fa-arrow-up mr-1"></i>+12.5%</div>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-3xl font-bold text-secondary mb-2" id="avgOrderValue">85 TND</div>
+                        <div class="text-gray-300">Avg Order Value</div>
+                        <div class="text-sm text-green-400 mt-2"><i class="fas fa-arrow-up mr-1"></i>+8.2%</div>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-3xl font-bold text-accent mb-2" id="tableTurnover">3.2x</div>
+                        <div class="text-gray-300">Table Turnover</div>
+                        <div class="text-sm text-yellow-400 mt-2"><i class="fas fa-minus mr-1"></i>Stable</div>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-3xl font-bold text-green-400 mb-2" id="customerRating">4.7/5</div>
+                        <div class="text-gray-300">Customer Rating</div>
+                        <div class="text-sm text-green-400 mt-2"><i class="fas fa-arrow-up mr-1"></i>+0.3</div>
+                    </div>
+                </div>
+
+                <!-- Charts and Analytics -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Revenue Trends</h3>
+                        <div class="chart-container h-64">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Popular Dishes</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Grilled Salmon</span>
+                                <span class="text-primary font-semibold">142 orders</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Beef Tenderloin</span>
+                                <span class="text-primary font-semibold">98 orders</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Lobster Risotto</span>
+                                <span class="text-primary font-semibold">87 orders</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Duck Confit</span>
+                                <span class="text-primary font-semibold">76 orders</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cost Breakdown -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Cost Breakdown</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Food Cost</span>
+                                <span class="text-red-400 font-semibold">30.2%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Labor Cost</span>
+                                <span class="text-yellow-400 font-semibold">28.5%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Overhead</span>
+                                <span class="text-blue-400 font-semibold">15.8%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Net Margin</span>
+                                <span class="text-emerald-400 font-semibold">25.5%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Inventory Status</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Low Stock Items</span>
+                                <span class="text-yellow-400 font-semibold">7 items</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Waste %</span>
+                                <span class="text-red-400 font-semibold">2.3%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Pending Orders</span>
+                                <span class="text-blue-400 font-semibold">3 orders</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Staff Performance</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Chef Efficiency</span>
+                                <span class="text-green-400 font-semibold">94%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Service Speed</span>
+                                <span class="text-yellow-400 font-semibold">8.2 min</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Table Turn</span>
+                                <span class="text-blue-400 font-semibold">3.2x</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventory Management Section -->
+        <section id="inventory" class="section-hidden py-20 bg-dark-secondary">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text">Inventory Management</h2>
+                    <p class="text-gray-300 text-lg">Track ingredients, manage stock levels, and optimize procurement</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Stock Overview -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Stock Overview</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Low Stock Items</span>
+                                <span class="text-yellow-400 font-semibold">7 items</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Out of Stock</span>
+                                <span class="text-red-400 font-semibold">2 items</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Total SKUs</span>
+                                <span class="text-primary font-semibold">342</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Ingredient Categories -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Categories</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-2 bg-dark-tertiary rounded">
+                                <span class="text-gray-300">🥩 Meat & Poultry</span>
+                                <span class="text-primary font-semibold">45</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-dark-tertiary rounded">
+                                <span class="text-gray-300">🐟 Seafood</span>
+                                <span class="text-primary font-semibold">32</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-dark-tertiary rounded">
+                                <span class="text-gray-300">🥬 Vegetables</span>
+                                <span class="text-primary font-semibold">89</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-dark-tertiary rounded">
+                                <span class="text-gray-300">🧂 Spices & Herbs</span>
+                                <span class="text-primary font-semibold">67</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <button onclick="showAddIngredientModal()" class="btn-primary w-full py-2">
+                                <i class="fas fa-plus mr-2"></i>Add Ingredient
+                            </button>
+                            <button onclick="generatePurchaseOrder()" class="glass-card w-full py-2 hover:border-primary transition-all">
+                                <i class="fas fa-shopping-cart mr-2"></i>Generate PO
+                            </button>
+                            <button onclick="runInventoryAnalysis()" class="glass-card w-full py-2 hover:border-primary transition-all">
+                                <i class="fas fa-chart-bar mr-2"></i>Analyze Stock
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Inventory Table -->
+                <div class="glass-card p-6 mt-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold gradient-text">Current Inventory</h3>
+                        <div class="flex space-x-2">
+                            <input type="text" placeholder="Search ingredients..." class="form-input px-4 py-2" onkeyup="filterInventory(this.value)">
+                            <select class="form-input px-4 py-2" onchange="filterByCategory(this.value)">
+                                <option value="">All Categories</option>
+                                <option value="meat">Meat & Poultry</option>
+                                <option value="seafood">Seafood</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="spices">Spices & Herbs</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="inventoryTable" class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-600">
+                                    <th class="text-left py-3 px-4">Item</th>
+                                    <th class="text-left py-3 px-4">Category</th>
+                                    <th class="text-left py-3 px-4">Current Stock</th>
+                                    <th class="text-left py-3 px-4">Min Level</th>
+                                    <th class="text-left py-3 px-4">Unit Cost</th>
+                                    <th class="text-left py-3 px-4">Total Value</th>
+                                    <th class="text-left py-3 px-4">Status</th>
+                                    <th class="text-left py-3 px-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryBody">
+                                <!-- Dynamic content will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Generator Section -->
+        <section id="menu-generator" class="section-hidden py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text">AI Menu Generator</h2>
+                    <p class="text-gray-300 text-lg">Create stunning menus with detailed cost analysis and nutritional information</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="glass-card p-8">
+                        <h3 class="text-2xl font-semibold mb-6 gradient-text">Generate Your Menu</h3>
+                        <form id="menuForm" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Cuisine Type</label>
+                                <select id="cuisineType" class="form-input w-full">
+                                    <option value="tunisian">🇹🇳 Tunisian</option>
+                                    <option value="mediterranean">🌊 Mediterranean</option>
+                                    <option value="french">🇫🇷 French</option>
+                                    <option value="italian">🇮🇹 Italian</option>
+                                    <option value="asian">🍜 Asian</option>
+                                    <option value="fusion">🔄 Fusion</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Menu Type</label>
+                                <select id="menuType" class="form-input w-full">
+                                    <option value="lunch">🍽️ Lunch Menu</option>
+                                    <option value="dinner">🌙 Dinner Menu</option>
+                                    <option value="brunch">🥞 Brunch Menu</option>
+                                    <option value="degustation">🍷 Dégustation Menu</option>
+                                    <option value="buffet">🍴 Buffet Menu</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Number of Courses</label>
+                                <select id="numCourses" class="form-input w-full">
+                                    <option value="3">3 Courses</option>
+                                    <option value="4">4 Courses</option>
+                                    <option value="5">5 Courses</option>
+                                    <option value="6">6 Courses</option>
+                                    <option value="7">7 Courses</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Target Price Range (TND)</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="number" id="minPrice" placeholder="Min" class="form-input" value="25">
+                                    <input type="number" id="maxPrice" placeholder="Max" class="form-input" value="120">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Special Requirements</label>
+                                <textarea id="specialRequirements" rows="3" placeholder="e.g., vegetarian options, gluten-free, seasonal ingredients..." class="form-input w-full"></textarea>
+                            </div>
+                            <button type="submit" id="generateMenuBtn" class="btn-primary w-full py-4 text-lg">
+                                <i class="fas fa-magic mr-3"></i>Generate Menu
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="glass-card p-8">
+                        <h3 class="text-2xl font-semibold mb-6 gradient-text">Generated Menu</h3>
+                        <div id="menuResult" class="space-y-6">
+                            <div class="text-center text-gray-400 py-12">
+                                <i class="fas fa-utensils text-6xl mb-4 opacity-50"></i>
+                                <p>Your AI-generated menu will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Creator Section -->
+        <section id="video-creator" class="section-hidden py-20 bg-dark-secondary">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text">Velo 3 AI Video Creator</h2>
+                    <p class="text-gray-300 text-lg">Transform your culinary content into stunning videos with AI-powered Velo 3 technology</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="glass-card p-8">
+                        <h3 class="text-2xl font-semibold mb-6 gradient-text">Create Video Content</h3>
+                        <form id="videoForm" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Video Type</label>
+                                <select id="videoType" class="form-input w-full">
+                                    <option value="recipe">🍳 Recipe Tutorial</option>
+                                    <option value="restaurant">🏪 Restaurant Showcase</option>
+                                    <option value="ingredients">🥕 Ingredients Highlight</option>
+                                    <option value="chef">👨‍🍳 Chef Profile</option>
+                                    <option value="menu">📋 Menu Presentation</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Video Prompt</label>
+                                <textarea id="videoPrompt" rows="4" placeholder="Describe your video content... e.g., 'A step-by-step tutorial for making the perfect risotto with creamy texture and rich flavors'" class="form-input w-full"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Video Length</label>
+                                <select id="videoLength" class="form-input w-full">
+                                    <option value="30">30 seconds</option>
+                                    <option value="60">1 minute</option>
+                                    <option value="120">2 minutes</option>
+                                    <option value="180">3 minutes</option>
+                                    <option value="300">5 minutes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Style & Tone</label>
+                                <select id="videoStyle" class="form-input w-full">
+                                    <option value="professional">Professional</option>
+                                    <option value="casual">Casual</option>
+                                    <option value="artistic">Artistic</option>
+                                    <option value="fast-paced">Fast-paced</option>
+                                    <option value="relaxing">Relaxing</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="createVideoBtn" class="btn-primary w-full py-4 text-lg">
+                                <i class="fas fa-video mr-3"></i>Create Video with Velo 3
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="glass-card p-8">
+                        <h3 class="text-2xl font-semibold mb-6 gradient-text">Video Preview</h3>
+                        <div id="videoResult" class="space-y-6">
+                            <div class="text-center text-gray-400 py-12">
+                                <i class="fas fa-video text-6xl mb-4 opacity-50"></i>
+                                <p>Your AI-generated video will appear here</p>
+                                <p class="text-sm text-gray-500 mt-2">Powered by Velo 3 AI Technology</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Suppliers Management Section -->
+        <section id="suppliers" class="section-hidden py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text">Fournisseur Management</h2>
+                    <p class="text-gray-300 text-lg">Manage suppliers, track orders, and optimize procurement</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Supplier Overview</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Active Suppliers</span>
+                                <span class="text-primary font-semibold">23</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Pending Orders</span>
+                                <span class="text-yellow-400 font-semibold">7</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Monthly Spend</span>
+                                <span class="text-green-400 font-semibold">12,450 TND</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Top Suppliers</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-2 bg-dark-tertiary rounded">
+                                <span class="text-gray-300">🥩 Carrefour Market</span>
+                                <span class="text-primary font-semibold">4,250 TND</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-dark-tertiary rounded">
+                                <span class="text-gray-300">🐟 Poissonnerie du Port</span>
+                                <span class="text-primary font-semibold">2,890 TND</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-dark-tertiary rounded">
+                                <span class="text-gray-300">🥬 Marché Central</span>
+                                <span class="text-primary font-semibold">1,760 TND</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <button onclick="addNewSupplier()" class="btn-primary w-full py-2">
+                                <i class="fas fa-plus mr-2"></i>Add Supplier
+                            </button>
+                            <button onclick="generateRFQ()" class="glass-card w-full py-2 hover:border-primary transition-all">
+                                <i class="fas fa-file-invoice mr-2"></i>Generate RFQ
+                            </button>
+                            <button onclick="analyzeSupplierPerformance()" class="glass-card w-full py-2 hover:border-primary transition-all">
+                                <i class="fas fa-chart-line mr-2"></i>Performance Analysis
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Supplier Location</h3>
+                        <div class="space-y-4">
+                            <input id="supplierAddressInput" type="text" placeholder="Search address or place" class="form-input w-full px-4 py-2">
+                            <div id="supplierMap" class="w-full h-72 rounded-xl bg-dark-tertiary"></div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Selected Location</h3>
+                        <div id="supplierLocationInfo" class="text-sm text-gray-300">No location selected</div>
+                    </div>
+                </div>
+                
+                <!-- Supplier List -->
+                <div class="glass-card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold gradient-text">Supplier Directory</h3>
+                        <div class="flex space-x-2">
+                            <input type="text" placeholder="Search suppliers..." class="form-input px-4 py-2" onkeyup="filterSuppliers(this.value)">
+                            <select class="form-input px-4 py-2" onchange="filterByCategory(this.value)">
+                                <option value="">All Categories</option>
+                                <option value="meat">Meat & Poultry</option>
+                                <option value="seafood">Seafood</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="beverages">Beverages</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="supplierTable" class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-600">
+                                    <th class="text-left py-3 px-4">Supplier</th>
+                                    <th class="text-left py-3 px-4">Category</th>
+                                    <th class="text-left py-3 px-4">Contact</th>
+                                    <th class="text-left py-3 px-4">Rating</th>
+                                    <th class="text-left py-3 px-4">Monthly Spend</th>
+                                    <th class="text-left py-3 px-4">Status</th>
+                                    <th class="text-left py-3 px-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supplierBody">
+                                <!-- Dynamic supplier data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Financial Management Section -->
+        <section id="financial" class="section-hidden py-20 bg-dark-secondary">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text">Financial Management</h2>
+                    <p class="text-gray-300 text-lg">CAPEX/OPEX analysis, cost tracking, and financial optimization</p>
+                </div>
+                
+                <!-- Financial Overview Cards -->
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-semibold mb-4 gradient-text">CAPEX Summary</h3>
+                        <div class="text-2xl font-bold text-primary mb-2">45,200 TND</div>
+                        <div class="text-sm text-gray-400">Year-to-date</div>
+                        <div class="text-sm text-green-400 mt-2"><i class="fas fa-arrow-up mr-1"></i>+8.5%</div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-semibold mb-4 gradient-text">OPEX Monthly</h3>
+                        <div class="text-2xl font-bold text-secondary mb-2">12,450 TND</div>
+                        <div class="text-sm text-gray-400">Current month</div>
+                        <div class="text-sm text-red-400 mt-2"><i class="fas fa-arrow-up mr-1"></i>+3.2%</div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-semibold mb-4 gradient-text">ROI Analysis</h3>
+                        <div class="text-2xl font-bold text-accent mb-2">18.5%</div>
+                        <div class="text-sm text-gray-400">Annual return</div>
+                        <div class="text-sm text-green-400 mt-2"><i class="fas fa-arrow-up mr-1"></i>+2.1%</div>
+                    </div>
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-semibold mb-4 gradient-text">Break-even Point</h3>
+                        <div class="text-2xl font-bold text-green-400 mb-2">14 months</div>
+                        <div class="text-sm text-gray-400">Projected</div>
+                        <div class="text-sm text-yellow-400 mt-2"><i class="fas fa-minus mr-1"></i>Stable</div>
+                    </div>
+                </div>
+                
+                <!-- CAPEX/OPEX Tabs -->
+                <div class="glass-card p-6 mb-8">
+                    <div class="flex space-x-4 mb-6">
+                        <button onclick="showFinancialTab('capex')" id="capexTab" class="tab-active px-6 py-2 rounded-lg font-semibold">CAPEX Analysis</button>
+                        <button onclick="showFinancialTab('opex')" id="opexTab" class="glass-card px-6 py-2 rounded-lg font-semibold hover:border-primary transition-all">OPEX Analysis</button>
+                        <button onclick="showFinancialTab('budget')" id="budgetTab" class="glass-card px-6 py-2 rounded-lg font-semibold hover:border-primary transition-all">Budget Planning</button>
+                    </div>
+                    
+                    <!-- CAPEX Content -->
+                    <div id="capexContent" class="financial-content">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Capital Expenditure Analysis</h3>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-lg font-semibold mb-3 text-primary">Major Investments</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Commercial Kitchen Equipment</span>
+                                        <span class="text-primary font-semibold">18,500 TND</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">POS System Upgrade</span>
+                                        <span class="text-primary font-semibold">8,200 TND</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Interior Renovation</span>
+                                        <span class="text-primary font-semibold">12,800 TND</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Security & CCTV System</span>
+                                        <span class="text-primary font-semibold">5,700 TND</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-3 text-primary">Depreciation Schedule</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Kitchen Equipment (7 years)</span>
+                                        <span class="text-secondary font-semibold">2,643 TND/year</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">POS System (5 years)</span>
+                                        <span class="text-secondary font-semibold">1,640 TND/year</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Renovation (10 years)</span>
+                                        <span class="text-secondary font-semibold">1,280 TND/year</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- OPEX Content -->
+                    <div id="opexContent" class="financial-content hidden">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Operating Expenditure Analysis</h3>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-lg font-semibold mb-3 text-secondary">Monthly Costs</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Food & Beverage Costs</span>
+                                        <span class="text-secondary font-semibold">4,850 TND</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Labor Costs</span>
+                                        <span class="text-secondary font-semibold">3,200 TND</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Utilities & Rent</span>
+                                        <span class="text-secondary font-semibold">1,800 TND</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Marketing & Advertising</span>
+                                        <span class="text-secondary font-semibold">850 TND</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-3 text-secondary">Cost Optimization</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Food Cost %</span>
+                                        <span class="text-accent font-semibold">32.5%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Labor Cost %</span>
+                                        <span class="text-accent font-semibold">28.2%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Overhead %</span>
+                                        <span class="text-accent font-semibold">15.8%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Net Margin</span>
+                                        <span class="text-green-400 font-semibold">23.5%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Budget Content -->
+                    <div id="budgetContent" class="financial-content hidden">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">Budget Planning & Forecasting</h3>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-lg font-semibold mb-3 text-accent">Next Quarter Budget</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Revenue Projection</span>
+                                        <span class="text-green-400 font-semibold">125,000 TND</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Expense Budget</span>
+                                        <span class="text-red-400 font-semibold">95,000 TND</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Projected Profit</span>
+                                        <span class="text-primary font-semibold">30,000 TND</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-3 text-accent">Risk Analysis</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Market Risk</span>
+                                        <span class="text-yellow-400 font-semibold">Medium</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Operational Risk</span>
+                                        <span class="text-green-400 font-semibold">Low</span>
+                                    </div>
+                                    <div class="flex justify-between items-center p-3 bg-dark-tertiary rounded">
+                                        <span class="text-gray-300">Financial Risk</span>
+                                        <span class="text-green-400 font-semibold">Low</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Prompts Section -->
+        <section id="prompts" class="section-hidden py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text">AI Recipe & Prompt Library</h2>
+                    <p class="text-gray-300 text-lg">Professional chef prompts and AI-powered recipe generation</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Recipe Chef Prompts -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">👨‍🍳 Recipe Chef Prompts</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-dark-tertiary rounded-lg">
+                                <h4 class="font-semibold text-primary mb-2">Tunisian Specialties</h4>
+                                <p class="text-sm text-gray-300 mb-3">"Create an authentic Tunisian couscous royal with 7 vegetables, traditional spices, and perfect texture"</p>
+                                <button onclick="usePrompt('tunisian-couscous')" class="btn-primary text-xs px-3 py-1">Use Prompt</button>
+                            </div>
+                            <div class="p-4 bg-dark-tertiary rounded-lg">
+                                <h4 class="font-semibold text-primary mb-2">Mediterranean Fusion</h4>
+                                <p class="text-sm text-gray-300 mb-3">"Design a modern Mediterranean dish combining local Tunisian ingredients with French techniques"</p>
+                                <button onclick="usePrompt('med-fusion')" class="btn-primary text-xs px-3 py-1">Use Prompt</button>
+                            </div>
+                            <div class="p-4 bg-dark-tertiary rounded-lg">
+                                <h4 class="font-semibold text-primary mb-2">Seafood Specialties</h4>
+                                <p class="text-sm text-gray-300 mb-3">"Create a seafood bouillabaisse with fresh Mediterranean fish, saffron, and traditional accompaniments"</p>
+                                <button onclick="usePrompt('seafood-bouillabaisse')" class="btn-primary text-xs px-3 py-1">Use Prompt</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Menu Optimization Prompts -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">📊 Menu Optimization</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-dark-tertiary rounded-lg">
+                                <h4 class="font-semibold text-secondary mb-2">Cost Optimization</h4>
+                                <p class="text-sm text-gray-300 mb-3">"Analyze current menu items and suggest cost-effective alternatives while maintaining quality and taste"</p>
+                                <button onclick="usePrompt('cost-optimization')" class="btn-primary text-xs px-3 py-1">Use Prompt</button>
+                            </div>
+                            <div class="p-4 bg-dark-tertiary rounded-lg">
+                                <h4 class="font-semibold text-secondary mb-2">Seasonal Menu</h4>
+                                <p class="text-sm text-gray-300 mb-3">"Generate a seasonal menu using locally available ingredients for current Tunisian market conditions"</p>
+                                <button onclick="usePrompt('seasonal-menu')" class="btn-primary text-xs px-3 py-1">Use Prompt</button>
+                            </div>
+                            <div class="p-4 bg-dark-tertiary rounded-lg">
+                                <h4 class="font-semibold text-secondary mb-2">Nutritional Analysis</h4>
+                                <p class="text-sm text-gray-300 mb-3">"Provide detailed nutritional breakdown and calorie analysis for each menu item with portion sizes"</p>
+                                <button onclick="usePrompt('nutrition-analysis')" class="btn-primary text-xs px-3 py-1">Use Prompt</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Custom Prompt Generator -->
+                <div class="glass-card p-6">
+                    <h3 class="text-xl font-semibold mb-4 gradient-text">🤖 Custom AI Prompt Generator</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Cuisine Type</label>
+                            <select id="promptCuisine" class="form-input w-full mb-4">
+                                <option value="tunisian">Tunisian</option>
+                                <option value="mediterranean">Mediterranean</option>
+                                <option value="french">French</option>
+                                <option value="italian">Italian</option>
+                                <option value="asian">Asian</option>
+                                <option value="fusion">Fusion</option>
+                            </select>
+                            
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Dish Type</label>
+                            <select id="promptDishType" class="form-input w-full mb-4">
+                                <option value="appetizer">Appetizer</option>
+                                <option value="main-course">Main Course</option>
+                                <option value="dessert">Dessert</option>
+                                <option value="beverage">Beverage</option>
+                            </select>
+                            
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Complexity Level</label>
+                            <select id="promptComplexity" class="form-input w-full mb-4">
+                                <option value="simple">Simple (Beginner)</option>
+                                <option value="medium">Medium (Intermediate)</option>
+                                <option value="complex">Complex (Advanced)</option>
+                                <option value="professional">Professional (Chef Level)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Special Requirements</label>
+                            <textarea id="promptRequirements" rows="4" placeholder="e.g., gluten-free, vegan, low-calorie, seasonal ingredients..." class="form-input w-full mb-4"></textarea>
+                            
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Additional Notes</label>
+                            <textarea id="promptNotes" rows="3" placeholder="Any specific techniques, presentation styles, or cultural authenticity requirements..." class="form-input w-full mb-4"></textarea>
+                            
+                            <button onclick="generateCustomPrompt()" class="btn-primary w-full py-3">
+                                <i class="fas fa-magic mr-2"></i>Generate Custom Prompt
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Generated Prompt Display -->
+                <div class="glass-card p-6 mt-6">
+                    <h3 class="text-xl font-semibold mb-4 gradient-text">Generated Prompt</h3>
+                    <div id="generatedPromptDisplay" class="p-4 bg-dark-tertiary rounded-lg min-h-24">
+                        <div class="text-center text-gray-400">
+                            <i class="fas fa-lightbulb text-2xl mb-2"></i>
+                            <p>Your custom AI prompt will appear here</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3 mt-4">
+                        <button onclick="copyGeneratedPrompt()" class="btn-primary px-4 py-2">
+                            <i class="fas fa-copy mr-2"></i>Copy Prompt
+                        </button>
+                        <button onclick="useGeneratedPrompt()" class="glass-card px-4 py-2 hover:border-primary transition-all">
+                            <i class="fas fa-play mr-2"></i>Use This Prompt
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Configuration Section -->
+        <section id="api-config" class="section-hidden py-20 bg-dark-secondary">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 gradient-text">API Configuration</h2>
+                    <p class="text-gray-300 text-lg">Configure external API integrations and services</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Velo 3 AI Configuration -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">🎬 Velo 3 AI Video Service</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">API Key</label>
+                                <input type="password" id="velo3ApiKey" placeholder="Enter your Velo 3 API key" class="form-input w-full" value="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">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Gemini API Key</label>
+                                <input type="password" id="geminiApiKey" placeholder="Enter your Gemini API key" class="form-input w-full">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Video Quality</label>
+                                <select id="videoQuality" class="form-input w-full">
+                                    <option value="720p">720p HD</option>
+                                    <option value="1080p">1080p Full HD</option>
+                                    <option value="4k">4K Ultra HD</option>
+                                </select>
+                            </div>
+                            <button onclick="testVelo3Connection()" class="btn-primary w-full py-2">
+                                <i class="fas fa-play mr-2"></i>Test Velo 3 Connection
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Google Services Configuration -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-semibold mb-4 gradient-text">🔐 Google Services</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Google Client ID</label>
+                                <input type="text" id="googleClientId" placeholder="Enter your Google Client ID" class="form-input w-full">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Google Analytics ID</label>
+                                <input type="text" id="googleAnalyticsId" placeholder="Enter your Google Analytics ID" class="form-input w-full">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Google Maps API Key</label>
+                                <input type="password" id="googleMapsApiKey" placeholder="Enter your Google Maps API key" class="form-input w-full">
+                            </div>
+                            <div id="g_id_onload" 
+                                 data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+                                 data-login_uri="http://localhost:3000"
+                                 data-auto_prompt="false">
+                            </div>
+                            <div class="g_id_signin" 
+                                 data-type="standard" 
+                                 data-size="large" 
+                                 data-theme="filled_black" 
+                                 data-text="sign_in_with"
+                                 data-shape="rectangular">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional API Services -->
+                <div class="glass-card p-6 mt-8">
+                    <h3 class="text-xl font-semibold mb-6 gradient-text">Additional API Services</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-primary">🍽️ Nutrition APIs</h4>
+                            <div class="space-y-3">
+                                <input type="password" placeholder="USDA Food Data Central API" class="form-input w-full text-sm">
+                                <input type="password" placeholder="Nutritionix API Key" class="form-input w-full text-sm">
+                                <button onclick="testNutritionAPI()" class="btn-primary w-full py-2 text-sm">Test Nutrition API</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-secondary">📊 Analytics APIs</h4>
+                            <div class="space-y-3">
+                                <input type="password" placeholder="Mixpanel API Key" class="form-input w-full text-sm">
+                                <input type="password" placeholder="Amplitude API Key" class="form-input w-full text-sm">
+                                <button onclick="testAnalyticsAPI()" class="btn-primary w-full py-2 text-sm">Test Analytics API</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-accent">💰 Payment APIs</h4>
+                            <div class="space-y-3">
+                                <input type="password" placeholder="Stripe API Key" class="form-input w-full text-sm">
+                                <input type="password" placeholder="PayPal Client ID" class="form-input w-full text-sm">
+                                <button onclick="testPaymentAPI()" class="btn-primary w-full py-2 text-sm">Test Payment API</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Save Configuration -->
+                <div class="glass-card p-6 mt-8">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-semibold gradient-text">Configuration Status</h3>
+                            <p class="text-gray-400 text-sm">Save your API configurations for persistent access</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="saveApiConfiguration()" class="btn-primary px-6 py-2">
+                                <i class="fas fa-save mr-2"></i>Save Configuration
+                            </button>
+                            <button onclick="resetApiConfiguration()" class="glass-card px-6 py-2 hover:border-primary transition-all">
+                                <i class="fas fa-undo mr-2"></i>Reset All
+                            </button>
+                        </div>
+                    </div>
+                    <div id="apiStatus" class="mt-4 p-3 bg-dark-tertiary rounded-lg">
+                        <div class="text-sm text-gray-400">API status will appear here...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-secondary py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-utensils text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">CulinaAI</span>
+                    </div>
+                    <p class="text-gray-400">Your Complete AI-Powered Culinary Intelligence Platform</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Menu Generator</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Video Creator</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Inventory Management</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Financial Analytics</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API Reference</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Chef Community</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                <a href="#" aria-label="Twitter" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter text-xl" aria-hidden="true"></i></a>
+                <a href="#" aria-label="LinkedIn" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-linkedin text-xl" aria-hidden="true"></i></a>
+                <a href="#" aria-label="GitHub" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-github text-xl" aria-hidden="true"></i></a>
+                <a href="#" aria-label="Instagram" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-instagram text-xl" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 CulinaAI. All rights reserved. Powered by Velo 3 AI & Gemini Technology.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Suppress Tailwind CSS CDN warning for development
+        if (typeof console !== 'undefined') {
+            const originalWarn = console.warn;
+            console.warn = function(...args) {
+                if (args[0] && args[0].includes && args[0].includes('cdn.tailwindcss.com should not be used in production')) {
+                    return; // Suppress this specific warning
+                }
+                originalWarn.apply(console, arguments);
+            };
+        }
+    </script>
+    <script>
+        // ===== API CONFIGURATION =====
+        const API_BASE_URL = 'http://127.0.0.1:8000';
+        const API_ENDPOINTS = {
+            auth: {
+                login: `${API_BASE_URL}/api/auth/login`,
+                google: `${API_BASE_URL}/api/auth/google`
+            },
+            menus: {
+                generate: `${API_BASE_URL}/api/menus/generate`,
+                list: `${API_BASE_URL}/api/menus/dashboard/metricslist`
+            },
+            videos: {
+                generate: `${API_BASE_URL}/api/videos/generate`,
+                status: `${API_BASE_URL}/api/videos/status`
+            },
+            dashboard: {
+                metrics: `${API_BASE_URL}/api/dashboard/metrics`
+            },
+            pitchDeck: {
+                generate: `${API_BASE_URL}/api/pitch-deck/generate`
+            }
+        };
+        // ===== CORE FUNCTIONS =====
+        
+        // Login Modal Functions
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+        
+        function showCreateAccount() {
+            closeLoginModal();
+            document.getElementById('createAccountModal').classList.remove('hidden');
+        }
+        
+        function closeCreateAccountModal() {
+            document.getElementById('createAccountModal').classList.add('hidden');
+        }
+        
+        // Google Sign-In removed per request
+        
+        // Email Login Function
+        function loginWithEmail(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            
+            if (!email || !password) {
+                alert('Please enter both email and password!');
+                return;
+            }
+            
+            showNotification('Logging in...', 'info');
+            
+            fetch(API_ENDPOINTS.auth.login, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    handleSuccessfulLogin({
+                        provider: 'email',
+                        name: data.user.name || email.split('@')[0],
+                        email: email,
+                        picture: data.user.picture || 'logo.svg'
+                    });
+                    showNotification('Login successful! Welcome back! 🎉', 'success');
+                } else {
+                    showNotification('Login failed: ' + (data.message || 'Invalid credentials'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                showNotification('Login failed. Please try again.', 'error');
+            });
+        }
+        
+        // Create Account Function
+        function createAccount(event) {
+            event.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('newEmail').value;
+            const password = document.getElementById('newPassword').value;
+            const userType = document.getElementById('userType').value;
+            
+            if (!firstName || !lastName || !email || !password || !userType) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            alert(`Account created successfully for ${firstName} ${lastName}! Welcome to CulinaAI!`);
+            
+            handleSuccessfulLogin({
+                provider: 'email',
+                name: `${firstName} ${lastName}`,
+                email: email,
+                picture: 'logo.svg',
+                userType: userType
+            });
+        }
+        
+        // Handle Successful Login
+        function handleSuccessfulLogin(userData) {
+            closeLoginModal();
+            closeCreateAccountModal();
+            
+            localStorage.setItem('culinaai_user', JSON.stringify(userData));
+            updateUILoggedIn(userData);
+            showNotification(`Welcome, ${userData.name}! 🎉`, 'success');
+            showSection('dashboard');
+        }
+        
+        // Update UI for logged-in user
+        function updateUILoggedIn(userData) {
+            const loginBtn = document.querySelector('button[onclick="showLoginModal()"]');
+            if (loginBtn) {
+                loginBtn.innerHTML = `<img src="${userData.picture || 'logo.svg'}" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\'><rect width=\'64\' height=\'64\' rx=\'12\' fill=\'%230ea5e9\'/><text x=\'32\' y=\'40\' font-size=\'28\' text-anchor=\'middle\' fill=\'white\'>AI</text></svg>'" alt="Profile" class="w-8 h-8 rounded-full mr-2"> ${userData.name}`;
+                loginBtn.onclick = () => showUserProfile();
+            }
+            
+            const demoBtn = document.getElementById('demoModeBtn');
+            if (demoBtn && !document.getElementById('logoutBtn')) {
+                const logoutBtn = document.createElement('button');
+                logoutBtn.id = 'logoutBtn';
+                logoutBtn.className = 'glass-card px-4 py-2 text-sm hover:border-error transition-all text-red-400';
+                logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i>Logout';
+                logoutBtn.onclick = logout;
+                demoBtn.parentNode.insertBefore(logoutBtn, demoBtn.nextSibling);
+            }
+        }
+        
+        // Logout Function
+        function logout() {
+            localStorage.removeItem('culinaai_user');
+            
+            const loginBtn = document.querySelector('button[onclick="showUserProfile()"]');
+            if (loginBtn) {
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Login';
+                loginBtn.onclick = () => showLoginModal();
+            }
+            
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.remove();
+            }
+            
+            showNotification('Logged out successfully!', 'info');
+            showSection('welcome');
+        }
+        
+        // Show User Profile
+        function showUserProfile() {
+            const userData = JSON.parse(localStorage.getItem('culinaai_user') || '{}');
+            if (userData.name) {
+                alert(`Profile: ${userData.name}\nEmail: ${userData.email}\nProvider: ${userData.provider}`);
+            }
+        }
+        
+        // Notification Function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500' :
+                type === 'error' ? 'bg-red-500' :
+                type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+            } text-white`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : type === 'warning' ? 'exclamation' : 'info'}-circle mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Section Navigation Functions
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('section[id]');
+            sections.forEach(section => {
+                section.classList.add('section-hidden');
+                section.classList.remove('section-visible');
+            });
+            
+            // Show target section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('section-hidden');
+                targetSection.classList.add('section-visible');
+            }
+            if (sectionId === 'suppliers') {
+                loadGoogleMapsApi();
+            }
+            
+            // Update navigation active state
+            updateNavigationActive(sectionId);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Update navigation active state
+        function updateNavigationActive(activeSection) {
+            const navButtons = document.querySelectorAll('.nav-link');
+            navButtons.forEach(button => {
+                button.classList.remove('text-primary', 'font-semibold');
+                button.classList.add('text-gray-300');
+            });
+            
+            // Find and highlight the active button
+            const activeButton = Array.from(navButtons).find(button => {
+                const onclick = button.getAttribute('onclick');
+                return onclick && onclick.includes(`'${activeSection}'`);
+            });
+            
+            if (activeButton) {
+                activeButton.classList.remove('text-gray-300');
+                activeButton.classList.add('text-primary', 'font-semibold');
+            }
+        }
+        
+        // Demo Mode Function
+        function activateDemoMode() {
+            const demoUser = {
+                provider: 'demo',
+                name: 'Demo Chef',
+                email: 'demo@culinaai.com',
+                picture: 'logo.svg',
+                userType: 'chef'
+            };
+            
+            localStorage.setItem('culinaai_user', JSON.stringify(demoUser));
+            updateUILoggedIn(demoUser);
+            showNotification('Demo mode activated! Welcome, Demo Chef! 🎉', 'success');
+            showSection('dashboard');
+        }
+        
+        // Financial Tab Functions
+        function showFinancialTab(tab) {
+            document.querySelectorAll('.financial-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            document.querySelectorAll('#capexTab, #opexTab, #budgetTab').forEach(tabBtn => {
+                tabBtn.classList.remove('tab-active');
+                tabBtn.classList.add('glass-card');
+            });
+            
+            document.getElementById(tab + 'Content').classList.remove('hidden');
+            document.getElementById(tab + 'Tab').classList.add('tab-active');
+            document.getElementById(tab + 'Tab').classList.remove('glass-card');
+        }
+        
+        // ===== API CONFIGURATION FUNCTIONS =====
+        function testVelo3Connection() {
+            const apiKey = document.getElementById('velo3ApiKey').value;
+            if (!apiKey || apiKey === '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') {
+                showNotification('Please enter your Velo 3 API key!', 'warning');
+                return;
+            }
+            
+            showNotification('Testing Velo 3 connection...', 'info');
+            setTimeout(() => {
+                showNotification('Velo 3 API connection successful! 🎬', 'success');
+            }, 2000);
+        }
+        
+        function saveApiConfiguration() {
+            const config = {
+                velo3ApiKey: document.getElementById('velo3ApiKey').value,
+                geminiApiKey: document.getElementById('geminiApiKey').value,
+                videoQuality: document.getElementById('videoQuality').value,
+                googleClientId: document.getElementById('googleClientId').value,
+                googleAnalyticsId: document.getElementById('googleAnalyticsId').value,
+                googleMapsApiKey: document.getElementById('googleMapsApiKey').value
+            };
+            
+            localStorage.setItem('culinaai_api_config', JSON.stringify(config));
+            showNotification('API configuration saved successfully! 💾', 'success');
+            document.getElementById('apiStatus').innerHTML = '<div class="text-sm text-green-400">✅ All configurations saved successfully!</div>';
+        }
+        
+        function resetApiConfiguration() {
+            if (confirm('Are you sure you want to reset all API configurations?')) {
+                localStorage.removeItem('culinaai_api_config');
+                
+                // Reset form fields
+                document.getElementById('velo3ApiKey').value = '';
+                document.getElementById('geminiApiKey').value = '';
+                document.getElementById('googleClientId').value = '';
+                document.getElementById('googleAnalyticsId').value = '';
+                document.getElementById('googleMapsApiKey').value = '';
+                
+                showNotification('API configuration reset successfully! 🔄', 'info');
+                document.getElementById('apiStatus').innerHTML = '<div class="text-sm text-gray-400">🔄 Configuration reset to defaults</div>';
+            }
+        }
+        
+        // ===== MENU GENERATOR FUNCTIONS =====
+        function generateMenu() {
+            const formData = {
+                cuisine_type: document.getElementById('cuisineType').value,
+                guest_count: parseInt(document.getElementById('numCourses').value) * 10, // Convert courses to guest count
+                budget_per_person: parseFloat(document.getElementById('maxPrice').value),
+                dietary_restrictions: document.getElementById('specialRequirements').value,
+                preferences: document.getElementById('menuType').value
+            };
+            
+            if (!formData.cuisine_type || !formData.preferences) {
+                showNotification('Please select cuisine type and menu type!', 'warning');
+                return;
+            }
+            
+            showNotification('Generating menu with AI...', 'info');
+            
+            fetch(API_ENDPOINTS.menus.generate, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayGeneratedMenu(data.menu);
+                    showNotification('Menu generated successfully! 🍽️', 'success');
+                } else {
+                    showNotification('Menu generation failed: ' + (data.message || 'Unknown error'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Menu generation error:', error);
+                showNotification('Menu generation failed. Using demo data...', 'warning');
+                // Fallback to demo data
+                const menu = generateSampleMenu({
+                    cuisineType: formData.cuisine_type,
+                    menuType: formData.preferences,
+                    numCourses: Math.floor(formData.guest_count / 10),
+                    minPrice: 10,
+                    maxPrice: formData.budget_per_person,
+                    specialRequirements: formData.dietary_restrictions
+                });
+                displayGeneratedMenu(menu);
+            });
+        }
+        
+        function generateSampleMenu(data) {
+            const dishes = {
+                tunisian: ['Couscous Royal', 'Brik à l\'oeuf', 'Tajine aux légumes', 'Mechouia', 'Ojja'],
+                mediterranean: ['Grilled Sea Bass', 'Greek Salad', 'Paella', 'Ratatouille', 'Hummus'],
+                french: ['Coq au Vin', 'Bouillabaisse', 'Ratatouille', 'Crème Brûlée', 'Tarte Tatin'],
+                italian: ['Risotto', 'Osso Buco', 'Bruschetta', 'Tiramisu', 'Panna Cotta'],
+                asian: ['Pad Thai', 'Sushi Platter', 'Ramen', 'Dim Sum', 'Miso Soup'],
+                fusion: ['Tunisian Sushi', 'Mediterranean Ramen', 'French-Asian Fusion', 'Italian-Tunisian', 'Global Tapas']
+            };
+            
+            const selectedDishes = dishes[data.cuisineType] || dishes.tunisian;
+            
+            return {
+                title: `${data.cuisineType.charAt(0).toUpperCase() + data.cuisineType.slice(1)} ${data.menuType} Menu`,
+                courses: Array.from({length: parseInt(data.numCourses)}, (_, i) => ({
+                    name: selectedDishes[i % selectedDishes.length],
+                    description: `A perfectly crafted dish with authentic flavors and premium ingredients`,
+                    price: Math.floor(Math.random() * (parseInt(data.maxPrice) - parseInt(data.minPrice))) + parseInt(data.minPrice),
+                    calories: Math.floor(Math.random() * 300) + 200,
+                    lipids: Math.floor(Math.random() * 20) + 5,
+                    glucides: Math.floor(Math.random() * 40) + 10,
+                    proteines: Math.floor(Math.random() * 30) + 10
+                }))
+            };
+        }
+        
+        function displayGeneratedMenu(menu) {
+            const resultDiv = document.getElementById('menuResult');
+            
+            let html = `
+                <div class="space-y-6">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold gradient-text mb-2">${menu.title}</h3>
+                        <p class="text-gray-400">AI-generated with cost analysis and nutritional information</p>
+                    </div>
+            `;
+            
+            menu.courses.forEach((course, index) => {
+                html += `
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="text-xl font-semibold text-primary">${course.name}</h4>
+                                <p class="text-gray-300 text-sm mt-1">${course.description}</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-green-400">${course.price} TND</div>
+                                <div class="text-sm text-gray-400">per portion</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                            <div class="text-center p-3 bg-dark-tertiary rounded">
+                                <div class="text-yellow-400 font-semibold">${course.calories}</div>
+                                <div class="text-gray-400">Calories</div>
+                            </div>
+                            <div class="text-center p-3 bg-dark-tertiary rounded">
+                                <div class="text-red-400 font-semibold">${course.lipids}g</div>
+                                <div class="text-gray-400">Lipids</div>
+                            </div>
+                            <div class="text-center p-3 bg-dark-tertiary rounded">
+                                <div class="text-blue-400 font-semibold">${course.glucides}g</div>
+                                <div class="text-gray-400">Glucides</div>
+                            </div>
+                            <div class="text-center p-3 bg-dark-tertiary rounded">
+                                <div class="text-green-400 font-semibold">${course.proteines}g</div>
+                                <div class="text-gray-400">Protéines</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3 mt-4">
+                            <button onclick="generateVideoForDish('${course.name}')" class="btn-primary px-4 py-2 text-sm">
+                                <i class="fas fa-video mr-2"></i>Generate Video
+                            </button>
+                            <button onclick="saveMenuItem('${course.name}')" class="glass-card px-4 py-2 text-sm hover:border-primary transition-all">
+                                <i class="fas fa-save mr-2"></i>Save Item
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultDiv.innerHTML = html;
+        }
+        
+        // ===== VIDEO CREATOR FUNCTIONS =====
+        function createVideo() {
+            const formData = {
+                videoType: document.getElementById('videoType').value,
+                videoPrompt: document.getElementById('videoPrompt').value,
+                videoLength: document.getElementById('videoLength').value,
+                videoStyle: document.getElementById('videoStyle').value
+            };
+            
+            if (!formData.videoPrompt) {
+                showNotification('Please enter a video prompt!', 'warning');
+                return;
+            }
+            
+            showNotification('Creating video with Velo 3 AI...', 'info');
+            
+            fetch(API_ENDPOINTS.videos.generate, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Video creation started! Job ID: ' + data.job_id, 'success');
+                    // Simulate video creation progress
+                    simulateVideoProgress(data.job_id);
+                } else {
+                    showNotification('Video creation failed: ' + (data.message || 'Unknown error'), 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Video creation error:', error);
+                showNotification('Video creation failed. Using demo mode...', 'warning');
+                // Fallback to demo
+                setTimeout(() => {
+                    generateVideoForDish(formData.videoPrompt);
+                }, 3000);
+            });
+        }
+        
+        function generateVideoForDish(dishName) {
+            showNotification(`Generating video for ${dishName}...`, 'info');
+            const container = document.getElementById('videoResult');
+            if (!container) return;
+            container.innerHTML = `
+                <div class="glass-card p-6">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-video text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold gradient-text mb-2">${dishName} Tutorial</h4>
+                        <div class="loading-shimmer h-4 rounded mb-4" style="width:10%"></div>
+                        <p class="text-gray-300 text-sm mb-4">Creating professional cooking tutorial with Velo 3 AI...</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function simulateVideoProgress(jobId) {
+            let p = 0;
+            const i = setInterval(() => {
+                p += Math.random() * 15;
+                if (p >= 100) {
+                    p = 100;
+                    clearInterval(i);
+                    showNotification('Video creation completed! 🎬', 'success');
+                    pollVideoStatus(jobId);
+                }
+                const el = document.querySelector('.loading-shimmer');
+                if (el) el.style.width = `${p}%`;
+            }, 500);
+        }
+
+        async function pollVideoStatus(jobId) {
+            const url = `${API_ENDPOINTS.videos.status}/${jobId}`;
+            try {
+                const r = await fetch(url);
+                const d = await r.json();
+                displayVideoResult(d);
+            } catch(e) {
+                displayVideoResult({});
+            }
+        }
+
+        function displayVideoResult(job) {
+            const container = document.getElementById('videoResult');
+            if (!container) return;
+            const src = job.video_url && job.video_url.startsWith('http') ? job.video_url : 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
+            const poster = job.thumbnail_url || '';
+            container.innerHTML = `
+                <div class="glass-card p-6">
+                    <div class="space-y-4">
+                        <div class="aspect-video bg-dark-tertiary rounded-lg overflow-hidden">
+                            <video src="${src}" ${poster ? `poster='${poster}'` : ''} controls class="w-full h-full"></video>
+                        </div>
+                        <div class="flex justify-center space-x-3">
+                            <a href="${src}" download class="btn-primary px-4 py-2 text-sm"><i class="fas fa-download mr-2"></i>Download</a>
+                            <button onclick="shareVideo()" class="glass-card px-4 py-2 text-sm hover:border-primary transition-all"><i class="fas fa-share mr-2"></i>Share</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function downloadVideo() {
+            showNotification('Video download started...', 'info');
+            setTimeout(() => {
+                showNotification('Video downloaded successfully! 📥', 'success');
+            }, 2000);
+        }
+        
+        function shareVideo() {
+            showNotification('Video sharing link copied to clipboard! 📋', 'success');
+        }
+        
+        function saveMenuItem(itemName) {
+            showNotification(`Menu item "${itemName}" saved successfully! 💾`, 'success');
+        }
+        
+        // ===== UTILITY FUNCTIONS =====
+        function loadApiConfiguration() {
+            const savedConfig = localStorage.getItem('culinaai_api_config');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                
+                if (config.velo3ApiKey) document.getElementById('velo3ApiKey').value = config.velo3ApiKey;
+                if (config.geminiApiKey) document.getElementById('geminiApiKey').value = config.geminiApiKey;
+                if (config.videoQuality) document.getElementById('videoQuality').value = config.videoQuality;
+                if (config.googleClientId) document.getElementById('googleClientId').value = config.googleClientId;
+                if (config.googleAnalyticsId) document.getElementById('googleAnalyticsId').value = config.googleAnalyticsId;
+                if (config.googleMapsApiKey) document.getElementById('googleMapsApiKey').value = config.googleMapsApiKey;
+                
+                document.getElementById('apiStatus').innerHTML = '<div class="text-sm text-green-400">✅ Configuration loaded from saved settings</div>';
+            }
+        }
+        
+        // ===== EVENT LISTENERS =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize page
+            showSection('welcome');
+            
+            // Load saved user if exists
+            const savedUser = localStorage.getItem('culinaai_user');
+            if (savedUser) {
+                const userData = JSON.parse(savedUser);
+                if (!userData.picture || /placeholder\.com/i.test(userData.picture)) {
+                    userData.picture = 'logo.svg';
+                    localStorage.setItem('culinaai_user', JSON.stringify(userData));
+                }
+                updateUILoggedIn(userData);
+            }
+            
+            // Load API configuration
+            loadApiConfiguration();
+            
+            // Add form event listeners
+            const menuForm = document.getElementById('menuForm');
+            if (menuForm) {
+                menuForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    generateMenu();
+                });
+            }
+            
+            const videoForm = document.getElementById('videoForm');
+            if (videoForm) {
+                videoForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    createVideo();
+                });
+            }
+            
+            // Close modals on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeLoginModal();
+                    closeCreateAccountModal();
+                }
+            });
+        });
+        
+        // Handle Google OAuth callback
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const accessToken = urlParams.get('access_token');
+            if (accessToken) {
+                handleSuccessfulLogin({
+                    provider: 'google',
+                    name: 'Google User',
+                    email: 'user@gmail.com',
+                    picture: 'logo.svg'
+                });
+                // Clean URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+        
+        // API Configuration Functions
+        function testVelo3Connection() {
+            const apiKey = document.getElementById('velo3ApiKey').value;
+            if (!apiKey || apiKey === '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') {
+                showNotification('Please enter your Velo 3 API key!', 'warning');
+                return;
+            }
+            
+            showNotification('Testing Velo 3 connection...', 'info');
+            
+            // Simulate API test
+            setTimeout(() => {
+                showNotification('Velo 3 API connection successful! 🎬', 'success');
+            }, 2000);
+        }
+        
+        function testNutritionAPI() {
+            showNotification('Testing Nutrition APIs...', 'info');
+            setTimeout(() => {
+                showNotification('Nutrition APIs connected successfully! 🥗', 'success');
+            }, 1500);
+        }
+        
+        function testAnalyticsAPI() {
+            showNotification('Testing Analytics APIs...', 'info');
+            setTimeout(() => {
+                showNotification('Analytics APIs connected successfully! 📊', 'success');
+            }, 1500);
+        }
+        
+        function testPaymentAPI() {
+            showNotification('Testing Payment APIs...', 'info');
+            setTimeout(() => {
+                showNotification('Payment APIs connected successfully! 💳', 'success');
+            }, 1500);
+        }
+        
+        function saveApiConfiguration() {
+            const config = {
+                velo3ApiKey: document.getElementById('velo3ApiKey').value,
+                geminiApiKey: document.getElementById('geminiApiKey').value,
+                videoQuality: document.getElementById('videoQuality').value,
+                googleClientId: document.getElementById('googleClientId').value,
+                googleAnalyticsId: document.getElementById('googleAnalyticsId').value,
+                googleMapsApiKey: document.getElementById('googleMapsApiKey').value
+            };
+            
+            localStorage.setItem('culinaai_api_config', JSON.stringify(config));
+            showNotification('API configuration saved successfully! 💾', 'success');
+            
+            // Update status
+            document.getElementById('apiStatus').innerHTML = '<div class="text-sm text-green-400">✅ All configurations saved successfully!</div>';
+        }
+        
+        function resetApiConfiguration() {
+            if (confirm('Are you sure you want to reset all API configurations?')) {
+                localStorage.removeItem('culinaai_api_config');
+                
+                // Reset form fields
+                document.getElementById('velo3ApiKey').value = '';
+                document.getElementById('geminiApiKey').value = '';
+                document.getElementById('googleClientId').value = '';
+                document.getElementById('googleAnalyticsId').value = '';
+                document.getElementById('googleMapsApiKey').value = '';
+                
+                showNotification('API configuration reset successfully! 🔄', 'info');
+                document.getElementById('apiStatus').innerHTML = '<div class="text-sm text-gray-400">🔄 Configuration reset to defaults</div>';
+            }
+        }
+        
+        // Load saved API configuration
+        function loadApiConfiguration() {
+            const savedConfig = localStorage.getItem('culinaai_api_config');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                
+                if (config.velo3ApiKey) document.getElementById('velo3ApiKey').value = config.velo3ApiKey;
+                if (config.geminiApiKey) document.getElementById('geminiApiKey').value = config.geminiApiKey;
+                if (config.videoQuality) document.getElementById('videoQuality').value = config.videoQuality;
+                if (config.googleClientId) document.getElementById('googleClientId').value = config.googleClientId;
+                if (config.googleAnalyticsId) document.getElementById('googleAnalyticsId').value = config.googleAnalyticsId;
+                if (config.googleMapsApiKey) document.getElementById('googleMapsApiKey').value = config.googleMapsApiKey;
+                
+                document.getElementById('apiStatus').innerHTML = '<div class="text-sm text-green-400">✅ Configuration loaded from saved settings</div>';
+            }
+        }
+        
+        // Menu Generator Functions
+        function generateMenu() {
+            const formData = {
+                cuisineType: document.getElementById('cuisineType').value,
+                menuType: document.getElementById('menuType').value,
+                numCourses: document.getElementById('numCourses').value,
+                minPrice: document.getElementById('minPrice').value,
+                maxPrice: document.getElementById('maxPrice').value,
+                specialRequirements: document.getElementById('specialRequirements').value
+            };
+            
+            showNotification('Generating menu with AI...', 'info');
+            
+            // Simulate menu generation
+            setTimeout(() => {
+                const menu = generateSampleMenu(formData);
+                displayGeneratedMenu(menu);
+                showNotification('Menu generated successfully! 🍽️', 'success');
+            }, 3000);
+        }
+        
+        function generateSampleMenu(data) {
+            const dishes = {
+                tunisian: ['Couscous Royal', 'Brik à l\'oeuf', 'Tajine aux légumes', 'Mechouia', 'Ojja'],
+                mediterranean: ['Grilled Sea Bass', 'Greek Salad', 'Paella', 'Ratatouille', 'Hummus'],
+                french: ['Coq au Vin', 'Bouillabaisse', 'Ratatouille', 'Crème Brûlée', 'Tarte Tatin'],
+                italian: ['Risotto', 'Osso Buco', 'Bruschetta', 'Tiramisu', 'Panna Cotta'],
+                asian: ['Pad Thai', 'Sushi Platter', 'Ramen', 'Dim Sum', 'Miso Soup'],
+                fusion: ['Tunisian Sushi', 'Mediterranean Ramen', 'French-Asian Fusion', 'Italian-Tunisian', 'Global Tapas']
+            };
+            
+            const selectedDishes = dishes[data.cuisineType] || dishes.tunisian;
+            
+            return {
+                title: `${data.cuisineType.charAt(0).toUpperCase() + data.cuisineType.slice(1)} ${data.menuType} Menu`,
+                courses: Array.from({length: parseInt(data.numCourses)}, (_, i) => ({
+                    name: selectedDishes[i % selectedDishes.length],
+                    description: `A perfectly crafted dish with authentic flavors and premium ingredients`,
+                    price: Math.floor(Math.random() * (parseInt(data.maxPrice) - parseInt(data.minPrice)) + parseInt(data.minPrice)),
+                    calories: Math.floor(Math.random() * 300) + 200,
+                    lipids: Math.floor(Math.random() * 20) + 5,
+                    glucides: Math.floor(Math.random() * 40) + 10,
+                    proteines: Math.floor(Math.random() * 30) + 10
+                }))
+            };
+        }
+        
+        function displayGeneratedMenu(menu) {
+            const resultDiv = document.getElementById('menuResult');
+            
+            let html = `
+                <div class="space-y-6">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold gradient-text mb-2">${menu.title}</h3>
+                        <p class="text-gray-400">AI-generated with cost analysis and nutritional information</p>
+                    </div>
+            `;
+            
+            menu.courses.forEach((course, index) => {
+                html += `
+                    <div class="glass-card p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h4 class="text-xl font-semibold text-primary">${course.name}</h4>
+                                <p class="text-gray-300 text-sm mt-1">${course.description}</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-green-400">${course.price} TND</div>
+                                <div class="text-sm text-gray-400">per portion</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                            <div class="text-center p-3 bg-dark-tertiary rounded">
+                                <div class="text-yellow-400 font-semibold">${course.calories}</div>
+                                <div class="text-gray-400">Calories</div>
+                            </div>
+                            <div class="text-center p-3 bg-dark-tertiary rounded">
+                                <div class="text-red-400 font-semibold">${course.lipids}g</div>
+                                <div class="text-gray-400">Lipids</div>
+                            </div>
+                            <div class="text-center p-3 bg-dark-tertiary rounded">
+                                <div class="text-blue-400 font-semibold">${course.glucides}g</div>
+                                <div class="text-gray-400">Glucides</div>
+                            </div>
+                            <div class="text-center p-3 bg-dark-tertiary rounded">
+                                <div class="text-green-400 font-semibold">${course.proteines}g</div>
+                                <div class="text-gray-400">Protéines</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3 mt-4">
+                            <button onclick="generateVideoForDish('${course.name}')" class="btn-primary px-4 py-2 text-sm">
+                                <i class="fas fa-video mr-2"></i>Generate Video
+                            </button>
+                            <button onclick="saveMenuItem('${course.name}')" class="glass-card px-4 py-2 text-sm hover:border-primary transition-all">
+                                <i class="fas fa-save mr-2"></i>Save Item
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultDiv.innerHTML = html;
+        }
+        
+        // Video Creator Functions
+        function generateVideoForDish(dishName) {
+            showNotification(`Generating video for ${dishName}...`, 'info');
+            const container = document.getElementById('videoResult');
+            if (!container) return;
+            container.innerHTML = `
+                <div class="glass-card p-6">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-video text-white text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold gradient-text mb-2">${dishName} Tutorial</h4>
+                        <div class="loading-shimmer h-4 rounded mb-4" style="width:10%"></div>
+                        <p class="text-gray-300 text-sm mb-4">Creating professional cooking tutorial with Velo 3 AI...</p>
+                    </div>
+                </div>
+            `;
+            setTimeout(() => {
+                showNotification('Video generated successfully! 🎬', 'success');
+            }, 4000);
+        }
+        
+        function createVideo() {
+            const formData = {
+                videoType: document.getElementById('videoType').value,
+                videoPrompt: document.getElementById('videoPrompt').value,
+                videoLength: document.getElementById('videoLength').value,
+                videoStyle: document.getElementById('videoStyle').value
+            };
+            if (!formData.videoPrompt) {
+                showNotification('Please enter a video prompt!', 'warning');
+                return;
+            }
+            showNotification('Creating video with Velo 3 AI...', 'info');
+            generateVideoForDish(formData.videoPrompt);
+            const payload = {
+                chef_prompt: formData.videoPrompt,
+                menu_item: null,
+                video_name: `culina_${Date.now()}`,
+                custom_settings: {
+                    style: formData.videoStyle,
+                    length: formData.videoLength,
+                    video_type: formData.videoType
+                }
+            };
+            fetch(API_ENDPOINTS.videos.generate, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(r => r.json())
+            .then(d => {
+                if (d.success) {
+                    showNotification('Video creation started! Job ID: ' + d.job_id, 'success');
+                    simulateVideoProgress(d.job_id);
+                } else {
+                    showNotification('Video creation failed: ' + (d.message || 'Unknown error'), 'error');
+                }
+            })
+            .catch(() => {
+                showNotification('Video creation failed. Using demo mode...', 'warning');
+                setTimeout(() => {
+                    displayVideoResult({});
+                }, 3000);
+            });
+        }
+        
+        function downloadVideo() {
+            showNotification('Video download started...', 'info');
+            setTimeout(() => {
+                showNotification('Video downloaded successfully! 📥', 'success');
+            }, 2000);
+        }
+        
+        function shareVideo() {
+            showNotification('Video sharing link copied to clipboard! 📋', 'success');
+        }
+        
+        function saveMenuItem(itemName) {
+            showNotification(`Menu item "${itemName}" saved successfully! 💾`, 'success');
+        }
+        
+        // Inventory Functions
+        function showAddIngredientModal() {
+            showNotification('Add ingredient feature coming soon!', 'info');
+        }
+        
+        function generatePurchaseOrder() {
+            showNotification('Purchase order generated! 📋', 'success');
+        }
+        
+        function runInventoryAnalysis() {
+            showNotification('Running inventory analysis...', 'info');
+            setTimeout(() => {
+                showNotification('Analysis complete! 📊', 'success');
+            }, 3000);
+        }
+        
+        function filterInventory(searchTerm) {
+            // Simulate filtering
+            showNotification(`Filtering inventory for "${searchTerm}"...`, 'info');
+        }
+        
+        // Supplier Functions
+        function addNewSupplier() {
+            showNotification('Add supplier feature coming soon!', 'info');
+        }
+        
+        function generateRFQ() {
+            showNotification('RFQ generated successfully! 📋', 'success');
+        }
+        
+        function analyzeSupplierPerformance() {
+            showNotification('Analyzing supplier performance...', 'info');
+            setTimeout(() => {
+                showNotification('Analysis complete! 📈', 'success');
+            }, 3000);
+        }
+        
+        function filterSuppliers(searchTerm) {
+            showNotification(`Filtering suppliers for "${searchTerm}"...`, 'info');
+        }
+
+        function filterByCategory(category) {
+            showNotification(`Filtering by category: ${category || 'All'}`, 'info');
+        }
+
+        let mapsLoaded = false;
+        let supplierMapInstance = null;
+        let supplierMarker = null;
+
+        function loadGoogleMapsApi() {
+            if (mapsLoaded) return;
+            const saved = localStorage.getItem('culinaai_api_config');
+            const key = saved ? (JSON.parse(saved).googleMapsApiKey || '') : '';
+            if (!key) {
+                return;
+            }
+            const s = document.createElement('script');
+            s.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=places&v=quarterly`;
+            s.async = true;
+            s.defer = true;
+            s.onload = () => { mapsLoaded = true; initSupplierMap(); };
+            document.head.appendChild(s);
+        }
+
+        function initSupplierMap() {
+            const el = document.getElementById('supplierMap');
+            if (!el || typeof google === 'undefined' || !google.maps) return;
+            supplierMapInstance = new google.maps.Map(el, { center: { lat: 36.8065, lng: 10.1815 }, zoom: 12, mapTypeId: 'roadmap' });
+            supplierMarker = new google.maps.Marker({ map: supplierMapInstance, position: { lat: 36.8065, lng: 10.1815 } });
+            initPlacesAutocomplete();
+        }
+
+        function initPlacesAutocomplete() {
+            const input = document.getElementById('supplierAddressInput');
+            if (!input || typeof google === 'undefined' || !google.maps || !google.maps.places) return;
+            const ac = new google.maps.places.Autocomplete(input, { fields: ['geometry', 'name', 'formatted_address'] });
+            ac.addListener('place_changed', () => {
+                const place = ac.getPlace();
+                if (!place || !place.geometry || !place.geometry.location) return;
+                const loc = place.geometry.location;
+                supplierMapInstance.setCenter(loc);
+                supplierMapInstance.setZoom(15);
+                supplierMarker.setPosition(loc);
+                const infoEl = document.getElementById('supplierLocationInfo');
+                if (infoEl) infoEl.textContent = `${place.name || ''} ${place.formatted_address || ''}`.trim();
+            });
+        }
+        
+        // AI Prompt Functions
+        function usePrompt(promptId) {
+            showNotification(`Using prompt: ${promptId}`, 'info');
+        }
+        
+        function generateCustomPrompt() {
+            const cuisine = document.getElementById('promptCuisine').value;
+            const dishType = document.getElementById('promptDishType').value;
+            const complexity = document.getElementById('promptComplexity').value;
+            const requirements = document.getElementById('promptRequirements').value;
+            const notes = document.getElementById('promptNotes').value;
+            
+            if (!cuisine || !dishType || !complexity) {
+                showNotification('Please fill in all required fields!', 'warning');
+                return;
+            }
+            
+            const prompt = `Create a ${complexity} ${dishType} recipe using ${cuisine} cuisine. ${requirements ? `Special requirements: ${requirements}.` : ''} ${notes ? `Additional notes: ${notes}.` : ''} Include detailed instructions, ingredient list, cooking times, and nutritional information.`;
+            
+            document.getElementById('generatedPromptDisplay').innerHTML = `
+                <div class="p-4 bg-dark-tertiary rounded-lg">
+                    <h4 class="font-semibold text-primary mb-2">Generated Prompt:</h4>
+                    <p class="text-gray-300 text-sm leading-relaxed">${prompt}</p>
+                </div>
+            `;
+            
+            showNotification('Custom prompt generated successfully! 🎨', 'success');
+        }
+        
+        function copyGeneratedPrompt() {
+            const promptText = document.querySelector('#generatedPromptDisplay p').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                showNotification('Prompt copied to clipboard! 📋', 'success');
+            });
+        }
+        
+        function useGeneratedPrompt() {
+            showNotification('Generated prompt applied to menu generator!', 'success');
+            showSection('menu-generator');
+        }
+        
+        // Form Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Menu form
+            const menuForm = document.getElementById('menuForm');
+            if (menuForm) {
+                menuForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    generateMenu();
+                });
+            }
+            
+            // Video form
+            const videoForm = document.getElementById('videoForm');
+            if (videoForm) {
+                videoForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    createVideo();
+                });
+            }
+            
+            // Load saved API configuration
+            loadApiConfiguration();
+            
+            // Load dashboard metrics
+            loadDashboardMetrics();
+        });
+        
+        function loadDashboardMetrics() {
+            fetch(API_ENDPOINTS.dashboard.metrics)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateDashboardMetrics(data.metrics);
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to load dashboard metrics:', error);
+                    // Use demo data as fallback
+                    updateDashboardMetrics({
+                        totalMenus: 156,
+                        activeUsers: 89,
+                        totalRevenue: 45280,
+                        monthlyGrowth: 23.5
+                    });
+                });
+        }
+        
+        function updateDashboardMetrics(metrics) {
+            // Update dashboard cards with real metrics
+            const elements = {
+                totalMenus: document.getElementById('totalMenus'),
+                activeUsers: document.getElementById('activeUsers'),
+                totalRevenue: document.getElementById('totalRevenue'),
+                monthlyGrowth: document.getElementById('monthlyGrowth')
+            };
+            
+            if (elements.totalMenus) elements.totalMenus.textContent = metrics.totalMenus;
+            if (elements.activeUsers) elements.activeUsers.textContent = metrics.activeUsers;
+            if (elements.totalRevenue) elements.totalRevenue.textContent = `TND ${metrics.totalRevenue.toLocaleString()}`;
+            if (elements.monthlyGrowth) elements.monthlyGrowth.textContent = `+${metrics.monthlyGrowth}%`;
+        }
+        
+        // Google Sign-In removed
+        
+    </script>

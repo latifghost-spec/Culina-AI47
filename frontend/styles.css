@@ -1,0 +1,48 @@
+
+.brand-title {
+  font-size:22px;
+  font-weight:800;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-subtitle {
+  font-size:12px;
+}
+
+.header-right {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.home-link {
+  color:#b0b7c3;
+  text-decoration:none;
+}
+
+.spacer-12 {
+  height:12px
+}
+
+.spacer-16 {
+  height:16px
+}
+
+.spacer-8 {
+  height:8px
+}
+
+.flex-1 {
+  flex:1
+}
+
+.inspiration-title {
+  margin-bottom:8px;
+}
+
+.inspiration-link-arrow {
+  color:#b0b7c3
+}

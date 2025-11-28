@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+google-generativeai
+SQLAlchemy
+psycopg
+PyJWT
+alembic
+python-multipart
