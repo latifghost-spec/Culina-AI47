@@ -1,0 +1,14 @@
+/.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.log
+.pytest_cache/
+.vscode/
+/.env
+frontend/node_modules/
+frontend/.next/
+node_modules/
+dist/
+build/
+.DS_Store
